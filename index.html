@@ -734,19 +734,83 @@ const db = getFirestore(app);
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 3500);
     }
-    t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3500);
-    }
 
     // ── REAL-TIME BIDDING ENGINE ──
     const auctionRef = doc(db, 'auctions', 'KGC-112-07');
-    // ... rest of the new bidding code ...
-    
+    let currentLiveBid = 0;
+
+    // 1. Listen for Live Updates from Firestore
+    onSnapshot(auctionRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        currentLiveBid = data.currentBid;
+        
+        // Update the screen instantly
+        document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
+        document.getElementById('bidCount').textContent = data.bidCount;
+        
+        // Add it to the history list visually
+        const list = document.getElementById('bidList');
+        const entry = document.createElement('div');
+        entry.className = 'bid-entry';
+        
+        let displayUser = data.highestBidder;
+        let amountColor = "var(--text-main)";
+
+        // If the current logged-in user is the highest bidder, make it green and say "You"
+        if (auth.currentUser && auth.currentUser.displayName === data.highestBidder) {
+            displayUser = "You";
+            amountColor = "#059669"; // Green
+        }
+
+        entry.innerHTML = `<div><div class="bid-user">${displayUser}</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:${amountColor}">RM ${data.currentBid.toLocaleString()}</div>`;
+        list.insertBefore(entry, list.firstChild);
+        
+        // Keep the list clean (max 6 items)
+        if(list.children.length > 6) list.removeChild(list.lastChild);
+      }
+    });
+
+    // 2. Submit a New Bid (Attached to window so your HTML button can click it)
+    window.placeBid = async function() {
+      // Security Check: Are they logged in?
+      if (!auth.currentUser) {
+        window.__kgcOpenLogin();
+        return;
+      }
+
+      const inputField = document.getElementById('bidField');
+      const bidAmount = parseFloat(inputField.value);
+
+      // Validation Check: Is the bid high enough?
+      if (!bidAmount || bidAmount <= currentLiveBid) {
+        inputField.style.borderColor = '#E60012';
+        inputField.placeholder = 'Must be above RM ' + currentLiveBid.toLocaleString();
+        setTimeout(() => { inputField.style.borderColor = ''; }, 2000);
+        inputField.value = '';
+        return;
+      }
+
+      // Send to Database
+      try {
+        const currentCount = parseInt(document.getElementById('bidCount').textContent) || 0;
+        await updateDoc(auctionRef, {
+          currentBid: bidAmount,
+          bidCount: currentCount + 1,
+          highestBidder: auth.currentUser.displayName || auth.currentUser.email.split('@')[0]
+        });
+        
+        // Clear the input box on success
+        inputField.value = '';
+        inputField.placeholder = 'Enter your bid (RM)';
+      } catch (error) {
+        console.error("Error placing bid: ", error);
+        alert("Could not place bid. Please try again.");
+      }
+    };
   </script>
 </head>
-  </script>
-</head>
-<body>
+    <body>
 
 <nav>
   <div class="logo">
