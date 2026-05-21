@@ -580,11 +580,14 @@
       onAuthStateChanged,
       updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      onSnapshot, 
+      updateDoc 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
+ // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -601,7 +604,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
     // ── AUTH STATE: update nav when user logs in/out ──
     onAuthStateChanged(auth, (user) => {
       const navAuth    = document.getElementById('navAuth');
@@ -730,6 +734,16 @@ const analytics = getAnalytics(app);
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 3500);
     }
+    t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ── REAL-TIME BIDDING ENGINE ──
+    const auctionRef = doc(db, 'auctions', 'KGC-112-07');
+    // ... rest of the new bidding code ...
+    
+  </script>
+</head>
   </script>
 </head>
 <body>
@@ -1500,51 +1514,7 @@ function filterCars(cat, btn) {
   });
 }
 
-// Bid simulation
-let currentBidVal = 218500;
-let bidCount = 14;
-const cities = ['KL','PJ','Subang','Penang','JB','Shah Alam','Petaling Jaya','Seremban'];
-const types = ['Dealer ***','Buyer ***'];
 
-function placeBid() {
-  let input = parseFloat(document.getElementById('bidField').value);
-  if(!input || input <= currentBidVal) {
-    document.getElementById('bidField').style.borderColor = '#E60012';
-    document.getElementById('bidField').placeholder = 'Must be above RM ' + currentBidVal.toLocaleString();
-    setTimeout(()=>{ document.getElementById('bidField').style.borderColor=''; }, 2000);
-    return;
-  }
-  currentBidVal = input;
-  bidCount++;
-  document.getElementById('currentBid').textContent = 'RM ' + currentBidVal.toLocaleString();
-  document.getElementById('bidCount').textContent = bidCount;
-  let list = document.getElementById('bidList');
-  let entry = document.createElement('div');
-  entry.className = 'bid-entry';
-  entry.innerHTML = `<div><div class="bid-user">You</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:#059669">RM ${currentBidVal.toLocaleString()}</div>`;
-  list.insertBefore(entry, list.firstChild);
-  document.getElementById('bidField').value = '';
-  document.getElementById('bidField').placeholder = 'Enter your bid (RM)';
-}
-
-// Simulate other bids occasionally
-setInterval(()=>{
-  if(Math.random() > 0.65) {
-    let auto = currentBidVal + (Math.floor(Math.random()*3)+1)*500;
-    currentBidVal = auto;
-    bidCount++;
-    document.getElementById('currentBid').textContent = 'RM ' + currentBidVal.toLocaleString();
-    document.getElementById('bidCount').textContent = bidCount;
-    let city = cities[Math.floor(Math.random()*cities.length)];
-    let type = types[Math.floor(Math.random()*types.length)];
-    let list = document.getElementById('bidList');
-    let entry = document.createElement('div');
-    entry.className = 'bid-entry';
-    entry.innerHTML = `<div><div class="bid-user">${type}${city}</div><div class="bid-time">Just now</div></div><div class="bid-amount">RM ${auto.toLocaleString()}</div>`;
-    list.insertBefore(entry, list.firstChild);
-    if(list.children.length > 8) list.removeChild(list.lastChild);
-  }
-}, 4200);
 
 // Modal
 function openEnquiry(carName) {
