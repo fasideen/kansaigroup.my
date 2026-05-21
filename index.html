@@ -569,6 +569,168 @@
     padding: 16px; border-radius: 4px; color: #059669; font-size: 14px; text-align: center; margin-top: 16px; font-weight: 500;
   }
 </style>
+  <!-- ═══ FIREBASE SDK ═══ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBGIqXhkC7S-eflSr9ofE6PFRd2_72pg4M",
+  authDomain: "kansai-malaysia.firebaseapp.com",
+  projectId: "kansai-malaysia",
+  storageBucket: "kansai-malaysia.firebasestorage.app",
+  messagingSenderId: "520074109100",
+  appId: "1:520074109100:web:c3938d3b0ff84f20bdff09",
+  measurementId: "G-30S3E79FL1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+    // ── AUTH STATE: update nav when user logs in/out ──
+    onAuthStateChanged(auth, (user) => {
+      const navAuth    = document.getElementById('navAuth');
+      const navBidBtn  = document.getElementById('navBidBtn');
+      if (user) {
+        // Logged in: show username + logout
+        navAuth.innerHTML = `
+          <li style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--text-muted);letter-spacing:1px;font-weight:600;">
+              ${user.displayName || user.email.split('@')[0]}
+            </span>
+            <button onclick="window.__kgcSignOut()" class="nav-cta"
+              style="background:var(--bg-alt);color:var(--text-main);border:1px solid var(--border);padding:8px 16px;">
+              Sign Out
+            </button>
+          </li>`;
+        navBidBtn.textContent  = 'Bid Now';
+        navBidBtn.onclick      = () => document.querySelector('#auction').scrollIntoView({behavior:'smooth'});
+      } else {
+        // Logged out: show login + register buttons
+        navAuth.innerHTML = `
+          <li>
+            <button onclick="window.__kgcOpenLogin()" class="btn-outline"
+              style="padding:9px 20px;font-size:13px;">
+              Log In
+            </button>
+          </li>
+          <li>
+            <button onclick="window.__kgcOpenRegister()" class="nav-cta">
+              Register
+            </button>
+          </li>`;
+        navBidBtn.textContent = 'Bid Now';
+        navBidBtn.onclick     = () => window.__kgcOpenRegister();
+      }
+    });
+
+    // ── REGISTER ──
+    window.__kgcRegister = async function() {
+      clearAuthErrors();
+      const name     = document.getElementById('authName').value.trim();
+      const email    = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const confirm  = document.getElementById('authConfirm').value;
+      const phone    = document.getElementById('authPhone').value.trim();
+
+      if (!name || !email || !password || !phone) {
+        return showAuthError('Please fill in all fields.');
+      }
+      if (password.length < 6) {
+        return showAuthError('Password must be at least 6 characters.');
+      }
+      if (password !== confirm) {
+        return showAuthError('Passwords do not match.');
+      }
+
+      setAuthLoading(true);
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: name });
+        closeAuthModal();
+        showToast(`Welcome to Kansai Group, ${name}!`);
+      } catch (err) {
+        showAuthError(friendlyError(err.code));
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    // ── LOGIN ──
+    window.__kgcLogin = async function() {
+      clearAuthErrors();
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) return showAuthError('Please enter your email and password.');
+
+      setAuthLoading(true);
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        closeAuthModal();
+        showToast('Welcome back!');
+      } catch (err) {
+        showAuthError(friendlyError(err.code));
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    // ── SIGN OUT ──
+    window.__kgcSignOut = async function() {
+      await signOut(auth);
+      showToast('Signed out successfully.');
+    };
+
+    // ── HELPERS ──
+    function friendlyError(code) {
+      const map = {
+        'auth/email-already-in-use':  'This email is already registered. Try logging in.',
+        'auth/invalid-email':          'Please enter a valid email address.',
+        'auth/wrong-password':         'Incorrect password. Please try again.',
+        'auth/user-not-found':         'No account found with this email.',
+        'auth/weak-password':          'Password must be at least 6 characters.',
+        'auth/too-many-requests':      'Too many attempts. Please wait a moment.',
+        'auth/network-request-failed': 'Network error. Please check your connection.',
+      };
+      return map[code] || 'Something went wrong. Please try again.';
+    }
+
+    function showAuthError(msg) {
+      const el = document.getElementById('authError');
+      if (el) { el.textContent = msg; el.style.display = 'block'; }
+    }
+    function clearAuthErrors() {
+      const el = document.getElementById('authError');
+      if (el) { el.textContent = ''; el.style.display = 'none'; }
+    }
+    function setAuthLoading(on) {
+      const btn = document.getElementById('authSubmitBtn');
+      if (btn) { btn.disabled = on; btn.textContent = on ? 'Please wait…' : btn.dataset.label; }
+    }
+    function showToast(msg) {
+      const t = document.getElementById('kgcToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+  </script>
 </head>
 <body>
 
@@ -586,10 +748,12 @@
     <li><a href="#inventory">Inventory</a></li>
     <li><a href="#auction">Live Auction</a></li>
     <li><a href="#contact">Contact</a></li>
+    <!-- Auth buttons injected here by onAuthStateChanged -->
+    <ul id="navAuth" style="display:contents;list-style:none;"></ul>
   </ul>
-  <a href="#auction" class="nav-cta">Bid Now</a>
+  <!-- Bid Now CTA — behaviour changes based on auth state -->
+  <a id="navBidBtn" href="#auction" class="nav-cta">Bid Now</a>
 </nav>
-
 <section class="hero" id="home">
   <div class="hero-grid"></div>
   <div class="hero-stripe"></div>
@@ -1424,5 +1588,137 @@ window.addEventListener('scroll', () => {
   });
 });
 </script>
+  <!-- ═══ AUTH MODAL ═══ -->
+<div class="modal-overlay" id="authModalOverlay">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+
+    <!-- REGISTER PANEL -->
+    <div id="authRegisterPanel">
+      <h3>CREATE ACCOUNT</h3>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">
+        Register to bid live and track your vehicles.
+      </p>
+      <div class="contact-form" style="gap:14px;">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input id="authName" type="text" placeholder="As per MyKad / Passport"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input id="authEmail" type="email" placeholder="your@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Phone / WhatsApp</label>
+          <input id="authPhone" type="tel" placeholder="+60 1X XXXXXXX"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="authPassword" type="password" placeholder="Minimum 6 characters"/>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input id="authConfirm" type="password" placeholder="Re-enter password"/>
+        </div>
+
+        <!-- Shared error box -->
+        <div id="authError" style="display:none;background:rgba(230,0,18,0.08);
+          border:1px solid rgba(230,0,18,0.2);color:var(--red);padding:12px 16px;
+          border-radius:4px;font-size:13px;font-weight:500;"></div>
+
+        <button id="authSubmitBtn" data-label="Create Account"
+          onclick="window.__kgcRegister()" class="btn-primary"
+          style="width:100%;padding:16px;font-size:15px;margin-top:4px;">
+          Create Account
+        </button>
+        <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:4px;">
+          Already have an account?
+          <a href="#" onclick="switchToLogin()" style="color:var(--red);font-weight:600;">
+            Log In
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div id="authLoginPanel" style="display:none;">
+      <h3>WELCOME BACK</h3>
+      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">
+        Sign in to your Kansai Group account.
+      </p>
+      <div class="contact-form" style="gap:14px;">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input id="loginEmail" type="email" placeholder="your@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input id="loginPassword" type="password" placeholder="Your password"/>
+        </div>
+
+        <div id="authError" style="display:none;background:rgba(230,0,18,0.08);
+          border:1px solid rgba(230,0,18,0.2);color:var(--red);padding:12px 16px;
+          border-radius:4px;font-size:13px;font-weight:500;"></div>
+
+        <button id="authSubmitBtn" data-label="Sign In"
+          onclick="window.__kgcLogin()" class="btn-primary"
+          style="width:100%;padding:16px;font-size:15px;margin-top:4px;">
+          Sign In
+        </button>
+        <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:4px;">
+          Don't have an account?
+          <a href="#" onclick="switchToRegister()" style="color:var(--red);font-weight:600;">
+            Register
+          </a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ TOAST NOTIFICATION ═══ -->
+<div id="kgcToast" style="
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#111827;color:white;padding:14px 28px;border-radius:6px;
+  font-size:14px;font-weight:500;letter-spacing:0.5px;z-index:999;
+  opacity:0;transition:all 0.35s ease;pointer-events:none;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,0.2);">
+</div>
+
+<style>
+  #kgcToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+
+<script>
+  // Modal open/close/switch helpers (plain JS, outside module scope)
+  function closeAuthModal() {
+    document.getElementById('authModalOverlay').classList.remove('open');
+  }
+  function switchToLogin() {
+    document.getElementById('authRegisterPanel').style.display = 'none';
+    document.getElementById('authLoginPanel').style.display = 'block';
+    const btn = document.getElementById('authSubmitBtn');
+    if (btn) { btn.textContent = 'Sign In'; btn.dataset.label = 'Sign In'; }
+  }
+  function switchToRegister() {
+    document.getElementById('authLoginPanel').style.display = 'none';
+    document.getElementById('authRegisterPanel').style.display = 'block';
+    const btn = document.getElementById('authSubmitBtn');
+    if (btn) { btn.textContent = 'Create Account'; btn.dataset.label = 'Create Account'; }
+  }
+  window.__kgcOpenRegister = function() {
+    switchToRegister();
+    document.getElementById('authModalOverlay').classList.add('open');
+  };
+  window.__kgcOpenLogin = function() {
+    switchToLogin();
+    document.getElementById('authModalOverlay').classList.add('open');
+  };
+  document.getElementById('authModalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeAuthModal();
+  });
+</script>
+</body>
 </body>
 </html>
