@@ -570,6 +570,7 @@
     padding: 16px; border-radius: 4px; color: #059669; font-size: 14px; text-align: center; margin-top: 16px; font-weight: 500;
   }
 </style>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import {
@@ -580,11 +581,15 @@
       onAuthStateChanged,
       updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    
+    // NEW IMPORTS: setDoc and getDoc added for KYC check
     import { 
       getFirestore, 
       doc, 
       onSnapshot, 
-      updateDoc 
+      updateDoc,
+      setDoc,
+      getDoc
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -660,8 +665,19 @@
 
       setAuthLoading(true);
       try {
+        // 1. Create the Auth account
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(cred.user, { displayName: name });
+        
+        // 2. NEW: Create the user's KYC profile in Firestore
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          name: name,
+          email: email,
+          phone: phone,
+          kycApproved: false, // Default to false!
+          createdAt: new Date().toISOString()
+        });
+
         closeAuthModal();
         showToast(`Welcome to Kansai Group, ${name}!`);
       } catch (err) {
@@ -712,7 +728,6 @@
     }
 
     function showAuthError(msg) {
-      // Look for both error boxes (register and login) and update the visible one
       const els = document.querySelectorAll('.auth-error-box');
       els.forEach(el => {
         el.textContent = msg; 
@@ -741,7 +756,7 @@
       if (!t) return;
       t.textContent = msg;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3500);
+      setTimeout(() => t.classList.remove('show'), 4000); // Increased time slightly for long error messages
     }
 
     // ── REAL-TIME BIDDING ENGINE ──
@@ -766,25 +781,37 @@
         let displayUser = data.highestBidder;
         let amountColor = "var(--text-main)";
 
-        // If the current logged-in user is the highest bidder, make it green and say "You"
         if (auth.currentUser && auth.currentUser.displayName === data.highestBidder) {
             displayUser = "You";
-            amountColor = "#059669"; // Green
+            amountColor = "#059669"; 
         }
 
         entry.innerHTML = `<div><div class="bid-user">${displayUser}</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:${amountColor}">RM ${data.currentBid.toLocaleString()}</div>`;
         list.insertBefore(entry, list.firstChild);
         
-        // Keep the list clean (max 6 items)
         if(list.children.length > 6) list.removeChild(list.lastChild);
       }
     });
 
-    // 2. Submit a New Bid (Attached to window so your HTML button can click it)
+    // 2. Submit a New Bid 
     window.placeBid = async function() {
-      // Security Check: Are they logged in?
+      // Security Check 1: Are they logged in?
       if (!auth.currentUser) {
         window.__kgcOpenLogin();
+        return;
+      }
+
+      // NEW Security Check 2: KYC Approval
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userSnap = await getDoc(userDocRef);
+
+        if (!userSnap.exists() || userSnap.data().kycApproved !== true) {
+          showToast("❌ BID REJECTED: Account pending KYC approval. Please contact support.");
+          return;
+        }
+      } catch (err) {
+        console.error("Error checking KYC: ", err);
         return;
       }
 
@@ -809,7 +836,6 @@
           highestBidder: auth.currentUser.displayName || auth.currentUser.email.split('@')[0]
         });
         
-        // Clear the input box on success
         inputField.value = '';
         inputField.placeholder = 'Enter your bid (RM)';
       } catch (error) {
@@ -1718,7 +1744,7 @@ window.addEventListener('scroll', () => {
 </style>
 
 <script>
-  // Modal open/close/switch helpers (plain JS, outside module scope)
+  // Modal open/close/switch helpers
   function closeAuthModal() {
     document.getElementById('authModalOverlay').classList.remove('open');
   }
