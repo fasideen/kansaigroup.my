@@ -794,24 +794,28 @@
     });
 
     // 2. Submit a New Bid 
+    // 2. Submit a New Bid (Loud Alert Version)
     window.placeBid = async function() {
       // Security Check 1: Are they logged in?
       if (!auth.currentUser) {
+        alert("You must log in before you can place a bid!");
         window.__kgcOpenLogin();
         return;
       }
 
-      // NEW Security Check 2: KYC Approval
+      // Security Check 2: KYC Approval
       try {
         const userDocRef = doc(db, 'users', auth.currentUser.uid);
         const userSnap = await getDoc(userDocRef);
 
         if (!userSnap.exists() || userSnap.data().kycApproved !== true) {
-          showToast("❌ BID REJECTED: Account pending KYC approval. Please contact support.");
+          // MASSIVE BROWSER ALERT
+          alert("❌ BID REJECTED\n\nYour account is pending KYC approval. You cannot bid until an Admin manually approves your account in the database.");
           return;
         }
       } catch (err) {
         console.error("Error checking KYC: ", err);
+        alert("Failed to check KYC status. Check your connection.");
         return;
       }
 
@@ -820,9 +824,7 @@
 
       // Validation Check: Is the bid high enough?
       if (!bidAmount || bidAmount <= currentLiveBid) {
-        inputField.style.borderColor = '#E60012';
-        inputField.placeholder = 'Must be above RM ' + currentLiveBid.toLocaleString();
-        setTimeout(() => { inputField.style.borderColor = ''; }, 2000);
+        alert("⚠️ INVALID BID\n\nYou must enter a number higher than RM " + currentLiveBid.toLocaleString());
         inputField.value = '';
         return;
       }
@@ -838,9 +840,10 @@
         
         inputField.value = '';
         inputField.placeholder = 'Enter your bid (RM)';
+        alert("✅ BID PLACED SUCCESSFULLY!\n\nYou are the highest bidder at RM " + bidAmount.toLocaleString());
       } catch (error) {
         console.error("Error placing bid: ", error);
-        alert("Could not place bid. Please try again.");
+        alert("Database Error: Could not place bid.");
       }
     };
   </script>
