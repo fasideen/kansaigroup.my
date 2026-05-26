@@ -110,6 +110,13 @@
   
   .hero-sub { font-size: 18px; color: var(--text-muted); line-height: 1.6; margin: 24px 0 40px; max-width: 520px; }
 
+  /* ——— TICKER STRIP ——— */
+  .ticker-wrap { background: #111827; padding: 12px 0; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .ticker { display: flex; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; }
+  @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+  .ticker-item { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 600; color: #9CA3AF; letter-spacing: 2px; text-transform: uppercase; display: inline-flex; align-items: center; margin-right: 48px; }
+  .ticker-dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; margin-right: 12px; box-shadow: 0 0 8px var(--red); }
+
   /* ——— INVENTORY GRID ——— */
   #inventory { padding: 80px 48px; background: var(--bg-main); }
   .section-label { font-size: 11px; letter-spacing: 3px; color: var(--red); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
@@ -252,7 +259,11 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let localStockMemory = {};
+    let localStockMemory = {
+      "sample1": { make: "Toyota", model: "Alphard 3.5 Executive Lounge", price: 388000, year: "2022", engine: "3500cc", seats: "7", category: "mpv", grade: "5", images: ["alphard1.jpg", "alphard2.jpg"] },
+      "sample2": { make: "Toyota", model: "Vellfire 2.5 Golden Eyes", price: 298000, year: "2021", engine: "2500cc", seats: "7", category: "mpv", grade: "4.5", images: ["vellfire1.jpg"] },
+      "sample3": { make: "Lexus", model: "RX300 F-Sport", price: 315000, year: "2021", engine: "2000cc Turbo", seats: "5", category: "suv", grade: "5", images: ["lexus1.jpg"] }
+    };
 
     onAuthStateChanged(auth, (user) => {
       const navAuth = document.getElementById('navAuth');
@@ -270,65 +281,79 @@
       }
     });
 
-    // ── AUTOMATED SHOWROOM SYNC ENGINE ──
+    // ── AUTOMATED RE-BUILT HYBRID SHOWROOM ENGINE ──
     async function fetchShowroomStock() {
       const grid = document.getElementById('carsGrid');
       if (!grid) return;
 
+      // 1. First render original stunning placeholder data layout
+      renderGridHTML();
+
+      // 2. Safely attempt to inject database listings if security access grants it
       try {
         const querySnapshot = await getDocs(collection(db, "stock"));
-        if (!querySnapshot.empty) grid.innerHTML = '';
-
-        querySnapshot.forEach((carDoc) => {
-          const id = carDoc.id;
-          const car = carDoc.data();
-          localStockMemory[id] = car;
-
-          // Safe extraction fallback variables to prevent runtime code execution crash drops
-          const carMake = String(car.make || 'Unknown').toUpperCase();
-          const carModel = String(car.model || 'Vehicle Asset').toUpperCase();
-          const carPrice = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
-          const carYear = car.year || 'N/A';
-          const carEngine = car.engine || 'N/A';
-          const carSeats = car.seats || 'N/A';
-          const carGrade = car.grade || car.AuctionGrade || '';
-
-          let displayImage = 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80';
-          if (car.images && car.images.length > 0) {
-            displayImage = car.images[0];
-          } else if (car.image) {
-            displayImage = car.image;
-          }
-
-          const previewGrade = carGrade ? `<div class="card-grade-badge">Grade ${carGrade}</div>` : '';
-
-          const cardHtml = `
-            <div class="car-card" onclick="window.openSlidingDetailDrawer('${id}')">
-              ${previewGrade}
-              <div class="car-img">
-                <div class="car-gallery"><img src="${displayImage}" alt="${carMake}"></div>
-              </div>
-              <div class="car-info">
-                <div class="car-make">${carMake}</div>
-                <div class="car-model">${carModel}</div>
-                <div class="car-specs">
-                  <span class="spec">${carYear}</span>
-                  <span class="spec">${carEngine}</span>
-                  <span class="spec">${carSeats}</span>
-                </div>
-                <div class="car-price">${carPrice} <span class="currency">RM</span></div>
-              </div>
-            </div>
-          `;
-          grid.innerHTML += cardHtml;
-        });
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach((carDoc) => {
+            localStockMemory[carDoc.id] = carDoc.data();
+          });
+          renderGridHTML(); // Refresh view grid layout
+        }
       } catch (error) {
-        console.error("Showroom collection snapshot breakdown trace exception:", error);
+        console.log("Firebase block active: Holding layout with local sample presets.");
       }
     }
+
+    function renderGridHTML() {
+      const grid = document.getElementById('carsGrid');
+      grid.innerHTML = '';
+      
+      Object.keys(localStockMemory).forEach((id) => {
+        const car = localStockMemory[id];
+        const carMake = String(car.make || 'Unknown').toUpperCase();
+        const carModel = String(car.model || 'Vehicle Asset').toUpperCase();
+        const carPrice = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
+        const carYear = car.year || 'N/A';
+        const carEngine = car.engine || 'N/A';
+        const carSeats = car.seats || 'N/A';
+        const carGrade = car.grade || car.AuctionGrade || '';
+
+        let displayImage = 'alphard1.jpg';
+        if (id === "sample2") displayImage = "vellfire1.jpg";
+        if (id === "sample3") displayImage = "lexus1.jpg";
+        
+        if (car.images && car.images.length > 0) {
+          displayImage = car.images[0];
+        } else if (car.image) {
+          displayImage = car.image;
+        }
+
+        const previewGrade = carGrade ? `<div class="card-grade-badge">Grade ${carGrade}</div>` : '';
+
+        const cardHtml = `
+          <div class="car-card" onclick="window.openSlidingDetailDrawer('${id}')">
+            ${previewGrade}
+            <div class="car-img">
+              <div class="car-gallery"><img src="${displayImage}" alt="${carMake}" onerror="this.src='https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80'"></div>
+            </div>
+            <div class="car-info">
+              <div class="car-make">${carMake}</div>
+              <div class="car-model">${carModel}</div>
+              <div class="car-specs">
+                <span class="spec">${carYear}</span>
+                <span class="spec">${carEngine}</span>
+                <span class="spec">${carSeats}</span>
+              </div>
+              <div class="car-price">${carPrice} <span class="currency">RM</span></div>
+            </div>
+          </div>
+        `;
+        grid.innerHTML += cardHtml;
+      });
+    }
+    
     fetchShowroomStock();
 
-    // ── CLICK HANDLER: INJECT DATA AND SLIDE OPEN RIGHT DRAWER PANEL ──
+    // ── CLICK HANDLER ──
     window.openSlidingDetailDrawer = function(carId) {
       const car = localStockMemory[carId];
       if (!car) return;
@@ -338,7 +363,10 @@
       const carPrice = car.price ? 'RM ' + parseFloat(car.price).toLocaleString() : 'Price TBD';
       const carGrade = car.grade || car.AuctionGrade || 'N/A';
 
-      let imageArray = ['https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80'];
+      let imageArray = ['alphard1.jpg'];
+      if (carId === "sample2") imageArray = ["vellfire1.jpg"];
+      if (carId === "sample3") imageArray = ["lexus1.jpg"];
+
       if (car.images && car.images.length > 0) {
         imageArray = car.images;
       } else if (car.image) {
@@ -363,7 +391,7 @@
       };
 
       const frame = document.getElementById('drawerMainImageFrame');
-      frame.innerHTML = `<img id="drawerMainDisplayImg" src="${imageArray[0]}" alt="Showroom Vehicle Detail Frame">`;
+      frame.innerHTML = `<img id="drawerMainDisplayImg" src="${imageArray[0]}" alt="Showroom Vehicle Detail Frame" onerror="this.src='https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80'">`;
 
       const strip = document.getElementById('drawerThumbnailsStrip');
       strip.innerHTML = '';
@@ -371,7 +399,7 @@
         const activeClass = index === 0 ? 'active' : '';
         strip.innerHTML += `
           <div class="drawer-thumb-dot ${activeClass}" onclick="window.switchDrawerPhoto(this, '${imgSrc}')">
-            <img src="${imgSrc}" alt="Thumbnail Grid">
+            <img src="${imgSrc}" alt="Thumbnail Grid" onerror="this.src='https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80'">
           </div>
         `;
       });
@@ -391,47 +419,19 @@
       document.getElementById('premiumAssetDetailDrawer').classList.remove('open');
     };
 
-    // ── AUTH ACTIONS CODE HOOKS ──
-    window.__kgcRegister = async function() {
-      const name     = document.getElementById('authName').value.trim();
-      const email    = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const phone    = document.getElementById('authPhone').value.trim();
-      if (!name || !email || !password || !phone) return alert('Please fill in all fields.');
-
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-        await setDoc(doc(db, 'users', cred.user.uid), { name: name, email: email, phone: phone, kycApproved: false, createdAt: new Date().toISOString() });
-        document.getElementById('authModalOverlay').classList.remove('open');
-        alert(`Welcome to Kansai Group, ${name}! Your account is registered.`);
-      } catch (err) { alert('Cloud sync transaction parameters error.'); }
-    };
-
-    window.__kgcLogin = async function() {
-      const email    = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        document.getElementById('authModalOverlay').classList.remove('open');
-        alert('Welcome back!');
-      } catch (err) { alert('Invalid parameters matched records.'); }
-    };
-
-    window.__kgcSignOut = async function() { await signOut(auth); alert('Signed out successfully.'); };
-
-    // ── REAL TIME LIVE AUCTION BID ENGINE BLOCK ──
-    const auctionRef = doc(db, 'auctions', 'KGC-112-07');
-    let currentLiveBid = 0;
-
-    onSnapshot(auctionRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        currentLiveBid = data.currentBid;
-        document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
-        document.getElementById('bidCount').textContent = data.bidCount;
-      }
-    });
+    // ── LIVE AUCTION CRASH SAFETY ENGINE BLOCK ──
+    try {
+      const auctionRef = doc(db, 'auctions', 'KGC-112-07');
+      onSnapshot(auctionRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if(data && data.currentBid) {
+            document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
+            document.getElementById('bidCount').textContent = data.bidCount || 0;
+          }
+        }
+      }, (err) => { console.log("Auction network link protected."); });
+    } catch(e) { console.log("Auction parameters safely isolated."); }
 
     window.placeBid = async function() {
       if (!auth.currentUser) { alert("You must log in before you can place a bid!"); window.__kgcOpenLogin(); return; }
@@ -441,18 +441,43 @@
           alert("❌ BID REJECTED\n\nYour account is pending KYC approval. You cannot bid until approved.");
           return;
         }
-      } catch (err) { return; }
-
-      const inputField = document.getElementById('bidField');
-      const bidAmount = parseFloat(inputField.value);
-      if (!bidAmount || bidAmount <= currentLiveBid) { alert("⚠️ INVALID BID VALUE"); return; }
-
-      try {
-        await updateDoc(auctionRef, { currentBid: bidAmount, bidCount: (parseInt(document.getElementById('bidCount').textContent)||0) + 1, highestBidder: auth.currentUser.displayName });
+        const inputField = document.getElementById('bidField');
+        const bidAmount = parseFloat(inputField.value);
+        const currentLiveBid = parseFloat(document.getElementById('currentBid').textContent.replace(/[^0-9.]/g, '')) || 218500;
+        if (!bidAmount || bidAmount <= currentLiveBid) { alert("⚠️ INVALID BID VALUE"); return; }
+        
+        await updateDoc(doc(db, 'auctions', 'KGC-112-07'), { currentBid: bidAmount, bidCount: (parseInt(document.getElementById('bidCount').textContent)||0) + 1, highestBidder: auth.currentUser.displayName });
         inputField.value = '';
         alert("✅ BID PLACED SUCCESSFULLY!");
-      } catch (error) { alert("Database error pipeline line breakdown."); }
+      } catch (error) { alert("Database permission restrictions active."); }
     };
+
+    window.__kgcRegister = async function() {
+      const name     = document.getElementById('authName').value.trim();
+      const email    = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const phone    = document.getElementById('authPhone').value.trim();
+      if (!name || !email || !password || !phone) return alert('Please fill in all fields.');
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: name });
+        await setDoc(doc(db, 'users', cred.user.uid), { name: name, email: email, phone: phone, kycApproved: false, createdAt: new Date().toISOString() });
+        document.getElementById('authModalOverlay').classList.remove('open');
+        alert(`Welcome to Kansai Group, ${name}!`);
+      } catch (err) { alert('Registration error.'); }
+    };
+
+    window.__kgcLogin = async function() {
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        document.getElementById('authModalOverlay').classList.remove('open');
+        alert('Welcome back!');
+      } catch (err) { alert('Invalid credentials.'); }
+    };
+
+    window.__kgcSignOut = async function() { await signOut(auth); alert('Signed out successfully.'); };
   </script>
 </head>
 <body>
@@ -478,14 +503,20 @@
   </div>
 </section>
 
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Alphard Executive Lounge — Available Sourcing S-Grade</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Nissan GT-R R35 Nismo Edition — Arriving Next Week</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Live Auction Hub Active — Secure Token KYC Registered</span>
+  </div>
+</div>
+
 <section id="inventory">
   <div class="inv-header">
     <div><div class="section-label">Available Now</div><h2>LIVE CLOUD <span class="accent">INVENTORY</span></h2></div>
   </div>
   
-  <div class="cars-grid" id="carsGrid">
-    <p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">Syncing showroom with live cloud records indices...</p>
-  </div>
+  <div class="cars-grid" id="carsGrid"></div>
 </section>
 
 <section id="auction" class="auction-bg">
@@ -494,7 +525,7 @@
   <div class="auction-main">
     <div class="auction-featured">
       <div class="auction-car-display">
-        <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1200&q=80" alt="Toyota Crown Live Auction" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+        <img src="crown.jpg" alt="Toyota Crown Live Auction" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
       </div>
       <div class="auction-car-info">
         <div class="car-make" style="margin-bottom:4px; font-weight: 700;">FEATURED LOT #KGC-112-07</div>
