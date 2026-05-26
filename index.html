@@ -511,7 +511,7 @@
   .footer-japan { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; color: rgba(212,175,55,0.8); }
   .footer-logo .logo-text .top { color: white; }
 
-  /* ——— UPGRADED MULTI-IMAGE DRAWER STYLES ——— */
+  /* ——— PREMIUM SLIDING DRAWER ——— */
   .drawer-overlay {
     position: fixed; inset: 0; background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(4px);
     z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
@@ -530,13 +530,8 @@
     font-size: 16px; cursor: pointer; box-shadow: -4px 4px 12px rgba(0,0,0,0.08);
   }
   .drawer-close:hover { background: var(--red); color: white; }
-  
-  /* Upgraded swipe panel layout */
   .drawer-hero { height: 300px; background: #111827; position: relative; }
-  .drawer-hero-gallery { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .drawer-hero-gallery::-webkit-scrollbar { display: none; }
-  .drawer-hero-gallery img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
-  
+  .drawer-hero img { width: 100%; height: 100%; object-fit: cover; }
   .drawer-content { padding: 40px; overflow-y: auto; flex: 1; }
   .drawer-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: var(--text-main); line-height: 1.1; }
   .drawer-price { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--red); margin: 8px 0 32px; }
@@ -547,7 +542,7 @@
   .drawer-grade-pill {
     position: absolute; bottom: -20px; right: 40px;
     background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
-    border: 1px solid var(--gold); border-radius: 8px; padding: 10px 20px; text-align: center; z-index: 5;
+    border: 1px solid var(--gold); border-radius: 8px; padding: 10px 20px; text-align: center;
   }
   .drawer-grade-pill .lbl { font-size: 9px; color: #9CA3AF; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
   .drawer-grade-pill .val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); line-height: 1; margin-top: 2px; }
@@ -561,7 +556,7 @@
     .hero-stats { left: 40px; right: 40px; }
     .hero-car-visual { display: none; }
     .hero-stripe { display: none; }
-    .about-grid, .contact-grid, .auction-main { grid-template-columns: 1fr; gap: 48px; }
+    .about-grid, .contact-grid, .auction-main { grid-template-columns: 1fr; }
     .services-grid { grid-template-columns: 1fr 1fr; }
     .cars-grid { grid-template-columns: 1fr 1fr; }
     .why-grid { grid-template-columns: 1fr 1fr; }
@@ -623,6 +618,7 @@
       updateProfile
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     
+    // NEW IMPORTS: setDoc and getDoc added for KYC check
     import { 
       getFirestore, 
       doc, 
@@ -652,6 +648,7 @@
       const navAuth    = document.getElementById('navAuth');
       const navBidBtn  = document.getElementById('navBidBtn');
       if (user) {
+        // Logged in: show username + logout
         navAuth.innerHTML = `
           <li style="display:flex;align-items:center;gap:8px;">
             <span style="font-size:12px;color:var(--text-muted);letter-spacing:1px;font-weight:600;">
@@ -665,6 +662,7 @@
         navBidBtn.textContent  = 'Bid Now';
         navBidBtn.onclick      = () => document.querySelector('#auction').scrollIntoView({behavior:'smooth'});
       } else {
+        // Logged out: show login + register buttons
         navAuth.innerHTML = `
           <li>
             <button onclick="window.__kgcOpenLogin()" class="btn-outline"
@@ -703,14 +701,16 @@
 
       setAuthLoading(true);
       try {
+        // 1. Create the Auth account
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(cred.user, { displayName: name });
         
+        // 2. NEW: Create the user's KYC profile in Firestore
         await setDoc(doc(db, 'users', cred.user.uid), {
           name: name,
           email: email,
           phone: phone,
-          kycApproved: false, 
+          kycApproved: false, // Default to false!
           createdAt: new Date().toISOString()
         });
 
@@ -792,21 +792,24 @@
       if (!t) return;
       t.textContent = msg;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 4000); 
+      setTimeout(() => t.classList.remove('show'), 4000); // Increased time slightly for long error messages
     }
 
     // ── REAL-TIME BIDDING ENGINE ──
     const auctionRef = doc(db, 'auctions', 'KGC-112-07');
     let currentLiveBid = 0;
 
+    // 1. Listen for Live Updates from Firestore
     onSnapshot(auctionRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         currentLiveBid = data.currentBid;
         
+        // Update the screen instantly
         document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
         document.getElementById('bidCount').textContent = data.bidCount;
         
+        // Add it to the history list visually
         const list = document.getElementById('bidList');
         const entry = document.createElement('div');
         entry.className = 'bid-entry';
@@ -826,22 +829,27 @@
       }
     });
 
+    // 2. Submit a New Bid 
     window.placeBid = async function() {
+      // Security Check 1: Are they logged in?
       if (!auth.currentUser) {
         alert("You must log in before you can place a bid!");
         window.__kgcOpenLogin();
         return;
       }
 
+      // Security Check 2: KYC Approval
       try {
         const userDocRef = doc(db, 'users', auth.currentUser.uid);
         const userSnap = await getDoc(userDocRef);
 
         if (!userSnap.exists() || userSnap.data().kycApproved !== true) {
+          // MASSIVE BROWSER ALERT
           alert("❌ BID REJECTED\n\nYour account is pending KYC approval. You cannot bid until an Admin manually approves your account in the database.");
           return;
         }
       } catch (err) {
+        console.error("Error checking KYC: ", err);
         alert("Failed to check KYC status. Check your connection.");
         return;
       }
@@ -849,12 +857,14 @@
       const inputField = document.getElementById('bidField');
       const bidAmount = parseFloat(inputField.value);
 
+      // Validation Check: Is the bid high enough?
       if (!bidAmount || bidAmount <= currentLiveBid) {
         alert("⚠️ INVALID BID\n\nYou must enter a number higher than RM " + currentLiveBid.toLocaleString());
         inputField.value = '';
         return;
       }
 
+      // Send to Database
       try {
         const currentCount = parseInt(document.getElementById('bidCount').textContent) || 0;
         await updateDoc(auctionRef, {
@@ -867,6 +877,7 @@
         inputField.placeholder = 'Enter your bid (RM)';
         alert("✅ BID PLACED SUCCESSFULLY!\n\nYou are the highest bidder at RM " + bidAmount.toLocaleString());
       } catch (error) {
+        console.error("Error placing bid: ", error);
         alert("Database Error: Could not place bid.");
       }
     };
@@ -981,6 +992,13 @@
     <span class="ticker-item"><span class="ticker-dot"></span> Toyota Land Cruiser 300 — RM 520,000</span>
     <span class="ticker-item"><span class="ticker-dot"></span> Mazda CX-8 — RM 168,000</span>
     <span class="ticker-item"><span class="ticker-dot"></span> Subaru Forester XT — RM 145,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Alphard 2023 — RM 285,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Nissan GTR R35 — RM 620,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Honda Odyssey 2022 — RM 195,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Lexus LX600 — RM 780,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Land Cruiser 300 — RM 520,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Mazda CX-8 — RM 168,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Subaru Forester XT — RM 145,000</span>
   </div>
 </div>
 
@@ -996,12 +1014,12 @@
         <div class="office-card">
           <div class="office-flag">🇯🇵</div>
           <div class="office-city">OSAKA HQ</div>
-          <div class="office-addr">1-7-22 Utsubohonmachi Nishi-ku, Osaka JAPAN 〒 550-0004, Osaka Japan — Main Operations</div>
+          <div class="office-addr">1-7-22 Utsubohonmachi Nishi-ku, Osaka JAPAN 〒 550-0004, Osaka<br>Japan — Main Operations</div>
         </div>
         <div class="office-card">
           <div class="office-flag">🇲🇾</div>
           <div class="office-city">KUALA LUMPUR</div>
-          <div class="office-addr"> Unit T3-15-20 15 Floor Tower 3 3 Towers, Jalan Ampang 50450 Kuala Lumpur</div>
+          <div class="office-addr"> Unit T3-15-20 15 Floor Tower 3 3 Towers, Jalan Ampang<br>50450 Kuala Lumpur</div>
         </div>
       </div>
     </div>
@@ -1073,6 +1091,38 @@
       <p>We partner with Malaysian car dealerships to provide a consistent, reliable supply of Japanese import vehicles. Bulk sourcing, competitive rates, and JPJ-compliant documentation.</p>
       <span class="service-tag">Bulk Wholesale</span>
     </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      </div>
+      <h3>Vehicle Import & Shipping</h3>
+      <p>End-to-end logistics from Japan to Malaysia. We handle export documents, shipping insurance, port clearance, and JPJ registration assistance for hassle-free delivery.</p>
+      <span class="service-tag">Door to Door</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6m-6 4h4"/>
+        </svg>
+      </div>
+      <h3>Inspection Reports</h3>
+      <p>Every vehicle comes with a full Japanese auction-grade inspection report (Grade 3 to 5 only). Full vehicle history, mileage certification, and condition transparency guaranteed.</p>
+      <span class="service-tag">Grade Certified</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>
+      </div>
+      <h3>Vehicle Sourcing on Request</h3>
+      <p>Can't find your dream car in our stock? Submit a sourcing request and our Japan-based team will search the major Kansai auction houses — USS, TAA, JU — to find your match.</p>
+      <span class="service-tag">Custom Order</span>
+    </div>
   </div>
 </section>
 
@@ -1093,7 +1143,7 @@
   </div>
   
   <div class="cars-grid" id="carsGrid">
-    <div class="car-card" data-cat="luxury suv" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 3.5 EXEC', '285,000', '2023', 'V6 3.5L', '8-Seater', '14,000 km', ['alphard1.jpg','alphard2.jpg','alphard3.jpg'], '5')">
+    <div class="car-card" data-cat="luxury suv" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 3.5 EXEC', '285,000', '2023', 'V6 3.5L', '8-Seater', '14,000 km', 'alphard1.jpg', '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot</div>
@@ -1121,7 +1171,7 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="sports" onclick="openDetailDrawer('NISSAN', 'GT-R R35 PREMIUM', '620,000', '2021', 'Twin-Turbo 3.8L', '4 Seats', '22,000 km', ['alphard1.jpg'], '5')">
+    <div class="car-card" data-cat="sports" onclick="openDetailDrawer('NISSAN', 'GT-R R35 PREMIUM', '620,000', '2021', 'Twin-Turbo 3.8L', '4 Seats', '22,000 km', 'alphard1.jpg', '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
@@ -1153,7 +1203,7 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('TOYOTA', 'LAND CRUISER 300', '520,000', '2022', 'V6 3.5L Twin Turbo', '7 Seats', '32,000 km', ['alphard1.jpg'], '4.5')">
+    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('TOYOTA', 'LAND CRUISER 300', '520,000', '2022', 'V6 3.5L Twin Turbo', '7 Seats', '32,000 km', 'alphard1.jpg', '4.5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
@@ -1186,7 +1236,7 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="luxury sedan" onclick="openDetailDrawer('LEXUS', 'LX 600 F-SPORT', '780,000', '2023', 'V6 3.5L Hybrid', '5 Seats', '9,000 km', ['alphard1.jpg'], '5')">
+    <div class="car-card" data-cat="luxury sedan" onclick="openDetailDrawer('LEXUS', 'LX 600 F-SPORT', '780,000', '2023', 'V6 3.5L Hybrid', '5 Seats', '9,000 km', 'alphard1.jpg', '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
@@ -1218,7 +1268,7 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('HONDA', 'ODYSSEY ABSOLUTE', '195,000', '2022', '2.4L VTEC', '8 Seats', '18,000 km', ['alphard1.jpg'], '4.5')">
+    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('HONDA', 'ODYSSEY ABSOLUTE', '195,000', '2022', '2.4L VTEC', '8 Seats', '18,000 km', 'alphard1.jpg', '4.5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot Deal</div>
@@ -1251,7 +1301,7 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="sedan sports" onclick="openDetailDrawer('MAZDA', 'CX-8 2.5T AWD', '168,000', '2023', '2.5L Turbo', '6 Seats', '11,500 km', ['alphard1.jpg'], '4.5')">
+    <div class="car-card" data-cat="sedan sports" onclick="openDetailDrawer('MAZDA', 'CX-8 2.5T AWD', '168,000', '2023', '2.5L Turbo', '6 Seats', '11,500 km', 'alphard1.jpg', '4.5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
@@ -1488,7 +1538,7 @@
 <div class="detail-drawer" id="detailDrawer">
   <div class="drawer-close" onclick="closeDrawer()">✕</div>
   <div class="drawer-hero">
-    <div class="drawer-hero-gallery" id="dGalleryFrame"></div>
+    <img id="dImg" src="alphard1.jpg" alt="Showroom Asset View">
     <div class="drawer-grade-pill">
       <div class="lbl">Auction Grade</div>
       <div class="val" id="dGrade">-</div>
@@ -1596,8 +1646,8 @@ function filterCars(cat, btn) {
   });
 }
 
-// Upgraded multi-image open function
-function openDetailDrawer(make, model, price, year, engine, seats, mileage, imagesArray, grade) {
+// Drawer Controller Engine
+function openDetailDrawer(make, model, price, year, engine, seats, mileage, imgSrc, grade) {
   document.getElementById('dMake').textContent = make.toUpperCase();
   document.getElementById('dModel').textContent = model.toUpperCase();
   document.getElementById('dPrice').textContent = 'RM ' + price;
@@ -1606,21 +1656,7 @@ function openDetailDrawer(make, model, price, year, engine, seats, mileage, imag
   document.getElementById('dSeats').textContent = seats;
   document.getElementById('dMileage').textContent = mileage;
   document.getElementById('dGrade').textContent = grade;
-
-  // Clear out old data and build swipe images sequentially
-  const container = document.getElementById('dGalleryFrame');
-  container.innerHTML = '';
-  
-  if (Array.isArray(imagesArray) && imagesArray.length > 0) {
-    imagesArray.forEach(url => {
-      const img = document.createElement('img');
-      img.src = url;
-      img.onerror = () => { img.src = 'alphard1.jpg'; };
-      container.appendChild(img);
-    });
-  } else {
-    container.innerHTML = `<img src="alphard1.jpg">`;
-  }
+  document.getElementById('dImg').src = imgSrc;
 
   document.getElementById('drawerWhatsAppBtn').onclick = function() {
     let text = encodeURIComponent("Hello Kansai Group KL team, I would like to inquire about the availability of the " + make + " " + model + " (" + year + ") Grade " + grade + ". Please assist me with stock booking parameters.");
@@ -1827,29 +1863,26 @@ window.addEventListener('scroll', () => {
         const mileage = car.mileageLog || car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '5';
         
-        // Form images layout cleanly into structural arrays for swiping
-        let allImages = [];
+        let imgUrl = 'alphard1.jpg';
         if (car.images && car.images.length > 0) {
-          allImages = car.images;
+          imgUrl = car.images[0];
         } else if (car.image) {
-          allImages = [car.image];
-        } else {
-          allImages = ['alphard1.jpg'];
+          imgUrl = car.image;
         }
 
         const card = document.createElement('div');
         card.className = 'car-card';
         card.setAttribute('data-cat', category.toLowerCase());
         
-        // Pass the entire parsed image gallery block to the side drawer
-        card.onclick = () => openDetailDrawer(make, model, price, year, engine, seats + '-Seater', mileage, allImages, grade);
+        // Setup click handler to trigger the master specifications side-drawer smoothly
+        card.onclick = () => openDetailDrawer(make, model, price, year, engine, seats + '-Seater', mileage, imgUrl, grade);
         
         card.innerHTML = `
           <div class="car-img">
             <div class="car-img-bg"></div>
             <div class="car-badge badge-new">Grade ${grade}</div>
             <div class="car-gallery">
-              <img src="${allImages[0]}" alt="${make} ${model}" onerror="this.src='alphard1.jpg'">
+              <img src="${imgUrl}" alt="${make} ${model}" onerror="this.src='alphard1.jpg'">
             </div>
           </div>
           <div class="car-info">
