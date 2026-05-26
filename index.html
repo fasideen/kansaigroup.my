@@ -531,6 +531,7 @@
   }
   .drawer-close:hover { background: var(--red); color: white; }
   
+  /* Upgraded swipe panel layout */
   .drawer-hero { height: 300px; background: #111827; position: relative; }
   .drawer-hero-gallery { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .drawer-hero-gallery::-webkit-scrollbar { display: none; }
@@ -818,7 +819,7 @@
             amountColor = "#059669"; 
         }
 
-        entry.innerHTML = `<div><div class="bid-user">${displayUser}</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:${amountColor}">RM ${data.currentLiveBid ? data.currentLiveBid.toLocaleString() : currentLiveBid.toLocaleString()}</div>`;
+        entry.innerHTML = `<div><div class="bid-user">${displayUser}</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:${amountColor}">RM ${data.currentBid.toLocaleString()}</div>`;
         list.insertBefore(entry, list.firstChild);
         
         if(list.children.length > 6) list.removeChild(list.lastChild);
@@ -980,13 +981,6 @@
     <span class="ticker-item"><span class="ticker-dot"></span> Toyota Land Cruiser 300 — RM 520,000</span>
     <span class="ticker-item"><span class="ticker-dot"></span> Mazda CX-8 — RM 168,000</span>
     <span class="ticker-item"><span class="ticker-dot"></span> Subaru Forester XT — RM 145,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Alphard 2023 — RM 285,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Nissan GTR R35 — RM 620,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Honda Odyssey 2022 — RM 195,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Lexus LX600 — RM 780,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Land Cruiser 300 — RM 520,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Mazda CX-8 — RM 168,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Subaru Forester XT — RM 145,000</span>
   </div>
 </div>
 
@@ -1099,7 +1093,7 @@
   </div>
   
   <div class="cars-grid" id="carsGrid">
-    <div class="car-card" data-cat="luxury suv" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 3.5 EXEC', '285,000', '2023', 'V6 3.5L', '8 Seats', '14,000 km', ['alphard1.jpg','alphard2.jpg','alphard3.jpg'], '5')">
+    <div class="car-card" data-cat="luxury suv" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 3.5 EXEC', '285,000', '2023', 'V6 3.5L', '8-Seater', '14,000 km', ['alphard1.jpg','alphard2.jpg','alphard3.jpg'], '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot</div>
@@ -1613,6 +1607,7 @@ function openDetailDrawer(make, model, price, year, engine, seats, mileage, imag
   document.getElementById('dMileage').textContent = mileage;
   document.getElementById('dGrade').textContent = grade;
 
+  // Clear out old data and build swipe images sequentially
   const container = document.getElementById('dGalleryFrame');
   container.innerHTML = '';
   
@@ -1810,9 +1805,6 @@ window.addEventListener('scroll', () => {
 <script type="module">
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   
-  // Create a clean background layout directory map
-  window.cloudCarImagesMemory = {};
-
   async function loadFireCMSExtraCars() {
     try {
       const db = window.firebase ? window.firebase.firestore() : getFirestore();
@@ -1825,7 +1817,6 @@ window.addEventListener('scroll', () => {
         const car = carDoc.data();
         if (carDoc.id.startsWith('sample')) return;
 
-        const id = carDoc.id;
         const make = (car.make || 'TOYOTA').toUpperCase();
         const model = (car.model || 'ALPHARD').toUpperCase();
         const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
@@ -1836,6 +1827,7 @@ window.addEventListener('scroll', () => {
         const mileage = car.mileageLog || car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '5';
         
+        // Form images layout cleanly into structural arrays for swiping
         let allImages = [];
         if (car.images && car.images.length > 0) {
           allImages = car.images;
@@ -1845,17 +1837,12 @@ window.addEventListener('scroll', () => {
           allImages = ['alphard1.jpg'];
         }
 
-        // Cache the parsed array cleanly inside background memory
-        window.cloudCarImagesMemory[id] = allImages;
-
         const card = document.createElement('div');
         card.className = 'car-card';
         card.setAttribute('data-cat', category.toLowerCase());
         
-        // Pass background tracking indices instead of layout text arrays
-        card.onclick = () => {
-          openDetailDrawerWithMemory(make, model, price, year, engine, seats + ' Seats', mileage, id, grade);
-        };
+        // Pass the entire parsed image gallery block to the side drawer
+        card.onclick = () => openDetailDrawer(make, model, price, year, engine, seats + '-Seater', mileage, allImages, grade);
         
         card.innerHTML = `
           <div class="car-img">
@@ -1884,18 +1871,9 @@ window.addEventListener('scroll', () => {
         grid.appendChild(card);
       });
     } catch (error) {
-      console.log("Firebase background scanner isolated.");
+      console.log("Firebase background scanner isolated. Data pipe safe.");
     }
   }
-
-  // Intermediate controller layout function to route details cleanly
-  window.openDetailDrawerWithMemory = function(make, model, price, year, engine, seats, mileage, id, grade) {
-    const imagesArray = window.cloudCarImagesMemory[id] || ['alphard1.jpg'];
-    if (typeof openDetailDrawer === 'function') {
-      openDetailDrawer(make, model, price, year, engine, seats, mileage, imagesArray, grade);
-    }
-  };
-
   setTimeout(loadFireCMSExtraCars, 1000);
 </script>
 </body>
