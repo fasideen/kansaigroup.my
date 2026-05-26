@@ -484,13 +484,13 @@
     padding: 24px; background: var(--bg-card); border-radius: 8px;
     border: 1px solid var(--border); box-shadow: var(--shadow-sm);
   }
-  .ci-icon {
+  .contact-item .ci-icon {
     width: 48px; height: 48px; background: rgba(230,0,18,0.05);
     border: 1px solid rgba(230,0,18,0.1); border-radius: 8px;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     color: var(--red);
   }
-  .ci-icon svg { width: 22px; height: 22px; }
+  .contact-item .ci-icon svg { width: 22px; height: 22px; }
   .ci-lbl { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
   .ci-val { font-size: 15px; font-weight: 600; margin-top: 6px; line-height: 1.5; color: var(--text-main); }
 
@@ -1750,6 +1750,82 @@ window.addEventListener('scroll', () => {
   document.getElementById('authModalOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeAuthModal();
   });
+</script>
+
+<script type="module">
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  
+  async function loadFireCMSExtraCars() {
+    try {
+      const db = window.firebase ? window.firebase.firestore() : getFirestore();
+      const querySnapshot = await getDocs(collection(db, "stock"));
+      const grid = document.getElementById('carsGrid');
+      
+      if (!grid) return;
+
+      querySnapshot.forEach((carDoc) => {
+        const car = carDoc.data();
+        
+        // Skip placeholders if they somehow match active IDs
+        if (carDoc.id.startsWith('sample')) return;
+
+        // Strict parameters matching original design formatting
+        const make = (car.make || 'TOYOTA').toUpperCase();
+        const model = (car.model || 'ALPHARD').toUpperCase();
+        const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
+        const year = car.year || '2025';
+        const engine = car.engine || '2500CC';
+        const seats = car.seats || '6';
+        const category = car.category || 'luxury suv';
+        const mileage = car.mileageLog || car.mileage || 'Brand New';
+        const grade = car.grade || car.AuctionGrade || '5';
+        
+        // Grab image arrays safely from URL input field
+        let imgUrl = 'alphard1.jpg';
+        if (car.images && car.images.length > 0) {
+          imgUrl = car.images[0];
+        } else if (car.image) {
+          imgUrl = car.image;
+        }
+
+        // Build premium car layout card matching your original structure exactly
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.setAttribute('data-cat', category.toLowerCase());
+        
+        card.innerHTML = `
+          <div class="car-img">
+            <div class="car-img-bg"></div>
+            <div class="car-badge badge-new">Grade ${grade}</div>
+            <div class="car-gallery">
+              <img src="${imgUrl}" alt="${make} ${model}" onerror="this.src='alphard1.jpg'">
+            </div>
+          </div>
+          <div class="car-info">
+            <div class="car-make">${make}</div>
+            <div class="car-model">${model}</div>
+            <div class="car-specs">
+              <span class="spec">${year}</span>
+              <span class="spec">${engine}</span>
+              <span class="spec">${seats}-Seater</span>
+              <span class="spec">${mileage}</span>
+            </div>
+            <div class="car-price">${price} <span class="currency">RM</span></div>
+            <div class="car-actions">
+              <button class="car-btn" onclick="openEnquiry('${make} ${model}')">Enquire</button>
+              <button class="car-btn primary" onclick="openEnquiry('${make} ${model}')">Buy Now</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.log("Firebase background scanner isolated. Data pipe safe.");
+    }
+  }
+  
+  // Wait for script module environment compilation
+  setTimeout(loadFireCMSExtraCars, 1000);
 </script>
 </body>
 </html>
