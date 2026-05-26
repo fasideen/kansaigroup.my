@@ -511,6 +511,42 @@
   .footer-japan { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; color: rgba(212,175,55,0.8); }
   .footer-logo .logo-text .top { color: white; }
 
+  /* ——— PREMIUM SLIDING DRAWER ——— */
+  .drawer-overlay {
+    position: fixed; inset: 0; background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(4px);
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+  .detail-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 560px;
+    background: var(--bg-main); z-index: 201; box-shadow: -10px 0 40px rgba(0,0,0,0.15);
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; flex-direction: column;
+  }
+  .detail-drawer.open { transform: translateX(0); }
+  .drawer-close {
+    position: absolute; top: 24px; left: -56px; background: white; border-radius: 50%;
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; cursor: pointer; box-shadow: -4px 4px 12px rgba(0,0,0,0.08);
+  }
+  .drawer-close:hover { background: var(--red); color: white; }
+  .drawer-hero { height: 300px; background: #111827; position: relative; }
+  .drawer-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .drawer-content { padding: 40px; overflow-y: auto; flex: 1; }
+  .drawer-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: var(--text-main); line-height: 1.1; }
+  .drawer-price { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--red); margin: 8px 0 32px; }
+  .drawer-specs-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+  .drawer-spec-item { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+  .drawer-spec-item .label { color: var(--text-muted); font-weight: 500; }
+  .drawer-spec-item .val { color: var(--text-main); font-weight: 600; }
+  .drawer-grade-pill {
+    position: absolute; bottom: -20px; right: 40px;
+    background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+    border: 1px solid var(--gold); border-radius: 8px; padding: 10px 20px; text-align: center;
+  }
+  .drawer-grade-pill .lbl { font-size: 9px; color: #9CA3AF; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+  .drawer-grade-pill .val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); line-height: 1; margin-top: 2px; }
+
   /* Responsive */
   @media(max-width: 1024px) {
     section { padding: 70px 40px; }
@@ -794,7 +830,6 @@
     });
 
     // 2. Submit a New Bid 
-    // 2. Submit a New Bid (Loud Alert Version)
     window.placeBid = async function() {
       // Security Check 1: Are they logged in?
       if (!auth.currentUser) {
@@ -1108,7 +1143,7 @@
   </div>
   
   <div class="cars-grid" id="carsGrid">
-    <div class="car-card" data-cat="luxury suv">
+    <div class="car-card" data-cat="luxury suv" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 3.5 EXEC', '285,000', '2023', 'V6 3.5L', '8-Seater', '14,000 km', 'alphard1.jpg', '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot</div>
@@ -1130,13 +1165,13 @@
         </div>
         <div class="car-price">285,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="openEnquiry('Toyota Alphard 3.5 Exec')">Enquire</button>
-          <button class="car-btn primary" onclick="openEnquiry('Toyota Alphard 3.5 Exec')">Buy Now</button>
+          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Toyota Alphard 3.5 Exec')">Enquire</button>
+          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Toyota Alphard 3.5 Exec')">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="sports">
+    <div class="car-card" data-cat="sports" onclick="openDetailDrawer('NISSAN', 'GT-R R35 PREMIUM', '620,000', '2021', 'Twin-Turbo 3.8L', '4 Seats', '22,000 km', 'alphard1.jpg', '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
@@ -1162,13 +1197,13 @@
         </div>
         <div class="car-price">620,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="openEnquiry('Nissan GT-R R35 Premium')">Enquire</button>
-          <button class="car-btn primary" onclick="openEnquiry('Nissan GT-R R35 Premium')">Buy Now</button>
+          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Nissan GT-R R35 Premium')">Enquire</button>
+          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Nissan GT-R R35 Premium')">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv">
+    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('TOYOTA', 'LAND CRUISER 300', '520,000', '2022', 'V6 3.5L Twin Turbo', '7 Seats', '32,000 km', 'alphard1.jpg', '4.5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
@@ -1195,13 +1230,13 @@
         </div>
         <div class="car-price">520,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="openEnquiry('Toyota Land Cruiser 300')">Enquire</button>
-          <button class="car-btn primary" onclick="window.location='#auction'">Bid Now</button>
+          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Toyota Land Cruiser 300')">Enquire</button>
+          <button class="car-btn primary" onclick="event.stopPropagation(); window.location='#auction'">Bid Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="luxury sedan">
+    <div class="car-card" data-cat="luxury sedan" onclick="openDetailDrawer('LEXUS', 'LX 600 F-SPORT', '780,000', '2023', 'V6 3.5L Hybrid', '5 Seats', '9,000 km', 'alphard1.jpg', '5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
@@ -1227,13 +1262,13 @@
         </div>
         <div class="car-price">780,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="openEnquiry('Lexus LX 600 F-Sport')">Enquire</button>
-          <button class="car-btn primary" onclick="openEnquiry('Lexus LX 600 F-Sport')">Buy Now</button>
+          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Lexus LX 600 F-Sport')">Enquire</button>
+          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Lexus LX 600 F-Sport')">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv">
+    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('HONDA', 'ODYSSEY ABSOLUTE', '195,000', '2022', '2.4L VTEC', '8 Seats', '18,000 km', 'alphard1.jpg', '4.5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot Deal</div>
@@ -1260,13 +1295,13 @@
         </div>
         <div class="car-price">195,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="openEnquiry('Honda Odyssey Absolute')">Enquire</button>
-          <button class="car-btn primary" onclick="openEnquiry('Honda Odyssey Absolute')">Buy Now</button>
+          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Honda Odyssey Absolute')">Enquire</button>
+          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Honda Odyssey Absolute')">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="sedan sports">
+    <div class="car-card" data-cat="sedan sports" onclick="openDetailDrawer('MAZDA', 'CX-8 2.5T AWD', '168,000', '2023', '2.5L Turbo', '6 Seats', '11,500 km', 'alphard1.jpg', '4.5')">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
@@ -1292,8 +1327,8 @@
         </div>
         <div class="car-price">168,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="openEnquiry('Mazda CX-8 2.5T AWD')">Enquire</button>
-          <button class="car-btn primary" onclick="window.location='#auction'">Bid Now</button>
+          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Mazda CX-8 2.5T AWD')">Enquire</button>
+          <button class="car-btn primary" onclick="event.stopPropagation(); window.location='#auction'">Bid Now</button>
         </div>
       </div>
     </div>
@@ -1499,6 +1534,31 @@
   </div>
 </section>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="detail-drawer" id="detailDrawer">
+  <div class="drawer-close" onclick="closeDrawer()">✕</div>
+  <div class="drawer-hero">
+    <img id="dImg" src="alphard1.jpg" alt="Showroom Asset View">
+    <div class="drawer-grade-pill">
+      <div class="lbl">Auction Grade</div>
+      <div class="val" id="dGrade">-</div>
+    </div>
+  </div>
+  <div class="drawer-content">
+    <div class="section-label" style="margin-bottom:4px;" id="dMake">Vehicle Make</div>
+    <div class="drawer-title" id="dModel">Vehicle Asset Layout Sourcing</div>
+    <div class="drawer-price" id="dPrice">RM 000,000</div>
+    
+    <div class="drawer-specs-grid">
+      <div class="drawer-spec-item"><span class="label">Production Year</span><span class="val" id="dYear">-</span></div>
+      <div class="drawer-spec-item"><span class="label">Engine Configuration</span><span class="val" id="dEngine">-</span></div>
+      <div class="drawer-spec-item"><span class="label">Seating Layout Arrangement</span><span class="val" id="dSeats">-</span></div>
+      <div class="drawer-spec-item"><span class="label">Certified Odometer Mileage</span><span class="val" id="dMileage">-</span></div>
+    </div>
+    <button class="btn-primary" id="drawerWhatsAppBtn" style="width:100%; padding:18px;">Direct WhatsApp Inquiry</button>
+  </div>
+</div>
+
 <footer>
   <div class="footer-grid">
     <div class="footer-col footer-logo">
@@ -1586,7 +1646,33 @@ function filterCars(cat, btn) {
   });
 }
 
-// Modal
+// Drawer Controller Engine
+function openDetailDrawer(make, model, price, year, engine, seats, mileage, imgSrc, grade) {
+  document.getElementById('dMake').textContent = make.toUpperCase();
+  document.getElementById('dModel').textContent = model.toUpperCase();
+  document.getElementById('dPrice').textContent = 'RM ' + price;
+  document.getElementById('dYear').textContent = year;
+  document.getElementById('dEngine').textContent = engine;
+  document.getElementById('dSeats').textContent = seats;
+  document.getElementById('dMileage').textContent = mileage;
+  document.getElementById('dGrade').textContent = grade;
+  document.getElementById('dImg').src = imgSrc;
+
+  document.getElementById('drawerWhatsAppBtn').onclick = function() {
+    let text = encodeURIComponent("Hello Kansai Group KL team, I would like to inquire about the availability of the " + make + " " + model + " (" + year + ") Grade " + grade + ". Please assist me with stock booking parameters.");
+    window.open("https://wa.me/601151177026?text=" + text, '_blank');
+  };
+
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('detailDrawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('detailDrawer').classList.remove('open');
+}
+
+// Modal Enquiries
 function openEnquiry(carName) {
   document.getElementById('modalCarName').textContent = 'Interested in: ' + carName;
   document.getElementById('modalOverlay').classList.add('open');
@@ -1765,11 +1851,8 @@ window.addEventListener('scroll', () => {
 
       querySnapshot.forEach((carDoc) => {
         const car = carDoc.data();
-        
-        // Skip placeholders if they somehow match active IDs
         if (carDoc.id.startsWith('sample')) return;
 
-        // Strict parameters matching original design formatting
         const make = (car.make || 'TOYOTA').toUpperCase();
         const model = (car.model || 'ALPHARD').toUpperCase();
         const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
@@ -1780,7 +1863,6 @@ window.addEventListener('scroll', () => {
         const mileage = car.mileageLog || car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '5';
         
-        // Grab image arrays safely from URL input field
         let imgUrl = 'alphard1.jpg';
         if (car.images && car.images.length > 0) {
           imgUrl = car.images[0];
@@ -1788,10 +1870,12 @@ window.addEventListener('scroll', () => {
           imgUrl = car.image;
         }
 
-        // Build premium car layout card matching your original structure exactly
         const card = document.createElement('div');
         card.className = 'car-card';
         card.setAttribute('data-cat', category.toLowerCase());
+        
+        // Setup click handler to trigger the master specifications side-drawer smoothly
+        card.onclick = () => openDetailDrawer(make, model, price, year, engine, seats + '-Seater', mileage, imgUrl, grade);
         
         card.innerHTML = `
           <div class="car-img">
@@ -1812,8 +1896,8 @@ window.addEventListener('scroll', () => {
             </div>
             <div class="car-price">${price} <span class="currency">RM</span></div>
             <div class="car-actions">
-              <button class="car-btn" onclick="openEnquiry('${make} ${model}')">Enquire</button>
-              <button class="car-btn primary" onclick="openEnquiry('${make} ${model}')">Buy Now</button>
+              <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('${make} ${model}')">Enquire</button>
+              <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('${make} ${model}')">Buy Now</button>
             </div>
           </div>
         `;
@@ -1823,8 +1907,6 @@ window.addEventListener('scroll', () => {
       console.log("Firebase background scanner isolated. Data pipe safe.");
     }
   }
-  
-  // Wait for script module environment compilation
   setTimeout(loadFireCMSExtraCars, 1000);
 </script>
 </body>
