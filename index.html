@@ -383,6 +383,7 @@
   .countdown-digits { display: flex; justify-content: center; gap: 12px; }
   .digit-block { display: flex; flex-direction: column; align-items: center; background: var(--bg-alt); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--border); min-width: 66px; }
   .digit-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--text-main); line-height: 1; }
+  .digit-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--text-main); line-height: 1; }
   .digit-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
   
   .bid-history { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow-sm); max-height: 280px; overflow-y: auto; }
@@ -431,45 +432,7 @@
   .footer-japan { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; color: rgba(212,175,55,0.8); }
   .footer-logo .logo-text .top { color: white; }
 
-  /* ——— UPGRADED MULTI-IMAGE DRAWER STYLES ——— */
-  .drawer-overlay {
-    position: fixed; inset: 0; background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(4px);
-    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-  }
-  .drawer-overlay.open { opacity: 1; pointer-events: all; }
-  .detail-drawer {
-    position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 560px;
-    background: var(--bg-main); z-index: 201; box-shadow: -10px 0 40px rgba(0,0,0,0.15);
-    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex; flex-direction: column;
-  }
-  .detail-drawer.open { transform: translateX(0); }
-  .drawer-close {
-    position: absolute; top: 24px; left: -56px; background: white; border-radius: 50%;
-    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; cursor: pointer; box-shadow: -4px 4px 12px rgba(0,0,0,0.08);
-  }
-  .drawer-close:hover { background: var(--red); color: white; }
-  .drawer-hero { height: 300px; background: #111827; position: relative; }
-  .drawer-hero-gallery { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-  .drawer-hero-gallery::-webkit-scrollbar { display: none; }
-  .drawer-hero-gallery img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
-  .drawer-content { padding: 40px; overflow-y: auto; flex: 1; }
-  .drawer-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: var(--text-main); line-height: 1.1; }
-  .drawer-price { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--red); margin: 8px 0 32px; }
-  .drawer-specs-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
-  .drawer-spec-item { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border); font-size: 14.5px; }
-  .drawer-spec-item .label { color: var(--text-muted); font-weight: 500; }
-  .drawer-spec-item .val { color: var(--text-main); font-weight: 600; }
-  .drawer-grade-pill {
-    position: absolute; bottom: -20px; right: 40px;
-    background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
-    border: 1px solid var(--gold); border-radius: 8px; padding: 10px 20px; text-align: center; z-index: 5;
-  }
-  .drawer-grade-pill .lbl { font-size: 9px; color: #9CA3AF; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
-  .drawer-grade-pill .val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); line-height: 1; margin-top: 2px; }
-
-  /* ═══ MOBILE RESPONSIVE ADAPTATION MEDIA QUERIES ═══ */
+  /* ═══ MOBILE RESPONSIVE LAYOUT MEDIA QUERIES ═══ */
   @media(max-width: 1024px) {
     section { padding: 70px 40px; }
     nav { padding: 0 24px; }
@@ -502,9 +465,6 @@
     .digit-num { font-size: 30px; }
     .inv-header { flex-direction: column; align-items: flex-start; gap: 16px; }
     .inv-filter { margin: 20px 0; }
-    .detail-drawer { max-width: 100%; }
-    .drawer-close { left: auto; right: 16px; top: 16px; background: rgba(255,255,255,0.9); }
-    .drawer-content { padding: 30px 20px; }
   }
 </style>
 
@@ -538,12 +498,10 @@
       measurementId: "G-30S3E79FL1"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ── AUTH STATE: update nav when user logs in/out ──
     onAuthStateChanged(auth, (user) => {
       const navAuth    = document.getElementById('navAuth');
       const navBidBtn  = document.getElementById('navBidBtn');
@@ -578,7 +536,6 @@
       }
     });
 
-    // ── REGISTER ──
     window.__kgcRegister = async function() {
       clearAuthErrors();
       const name     = document.getElementById('authName').value.trim();
@@ -587,29 +544,17 @@
       const confirm  = document.getElementById('authConfirm').value;
       const phone    = document.getElementById('authPhone').value.trim();
 
-      if (!name || !email || !password || !phone) {
-        return showAuthError('Please fill in all fields.');
-      }
-      if (password.length < 6) {
-        return showAuthError('Password must be at least 6 characters.');
-      }
-      if (password !== confirm) {
-        return showAuthError('Passwords do not match.');
-      }
+      if (!name || !email || !password || !phone) return showAuthError('Please fill in all fields.');
+      if (password.length < 6) return showAuthError('Password must be at least 6 characters.');
+      if (password !== confirm) return showAuthError('Passwords do not match.');
 
       setAuthLoading(true);
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(cred.user, { displayName: name });
-        
         await setDoc(doc(db, 'users', cred.user.uid), {
-          name: name,
-          email: email,
-          phone: phone,
-          kycApproved: false, 
-          createdAt: new Date().toISOString()
+          name: name, email: email, phone: phone, kycApproved: false, createdAt: new Date().toISOString()
         });
-
         closeAuthModal();
         showToast(`Welcome to Kansai Group, ${name}!`);
       } catch (err) {
@@ -619,12 +564,10 @@
       }
     };
 
-    // ── LOGIN ──
     window.__kgcLogin = async function() {
       clearAuthErrors();
       const email    = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
-
       if (!email || !password) return showAuthError('Please enter your email and password.');
 
       setAuthLoading(true);
@@ -639,59 +582,44 @@
       }
     };
 
-    // ── SIGN OUT ──
     window.__kgcSignOut = async function() {
       await signOut(auth);
       showToast('Signed out successfully.');
     };
 
-    // ── HELPERS ──
     function friendlyError(code) {
       const map = {
         'auth/email-already-in-use':  'This email is already registered. Try logging in.',
         'auth/invalid-email':          'Please enter a valid email address.',
         'auth/wrong-password':         'Incorrect password. Please try again.',
-        'auth/user-not-found':         'No account found with this email.',
-        'auth/weak-password':          'Password must be at least 6 characters.',
-        'auth/too-many-requests':      'Too many attempts. Please wait a moment.',
-        'auth/network-request-failed': 'Network error. Please check your connection.',
+        'auth/user-not-found':         'No account found with this email.'
       };
       return map[code] || 'Something went wrong. Please try again.';
     }
 
     function showAuthError(msg) {
       const els = document.querySelectorAll('.auth-error-box');
-      els.forEach(el => {
-        el.textContent = msg; 
-        el.style.display = 'block';
-      });
+      els.forEach(el => { el.textContent = msg; el.style.display = 'block'; });
     }
     
     function clearAuthErrors() {
       const els = document.querySelectorAll('.auth-error-box');
-      els.forEach(el => {
-        el.textContent = ''; 
-        el.style.display = 'none';
-      });
+      els.forEach(el => { el.textContent = ''; el.style.display = 'none'; });
     }
     
     function setAuthLoading(on) {
       const els = document.querySelectorAll('.auth-submit-btn');
-      els.forEach(btn => {
-         btn.disabled = on; 
-         btn.textContent = on ? 'Please wait…' : btn.dataset.label; 
-      });
+      els.forEach(btn => { btn.disabled = on; btn.textContent = on ? 'Please wait…' : btn.dataset.label; });
     }
     
     function showToast(msg) {
       const t = document.getElementById('kgcToast');
       if (!t) return;
-      t.textContent = msg;
-      t.classList.add('show');
+      t.textContent = msg; t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 4000); 
     }
 
-    // ── REAL-TIME BIDDING ENGINE ──
+    // Live Bid Controller
     const auctionRef = doc(db, 'auctions', 'KGC-112-07');
     let currentLiveBid = 0;
 
@@ -699,7 +627,6 @@
       if (docSnap.exists()) {
         const data = docSnap.data();
         currentLiveBid = data.currentBid;
-        
         document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
         document.getElementById('bidCount').textContent = data.bidCount;
         
@@ -709,62 +636,41 @@
         
         let displayUser = data.highestBidder;
         let amountColor = "var(--text-main)";
-
         if (auth.currentUser && auth.currentUser.displayName === data.highestBidder) {
-            displayUser = "You";
-            amountColor = "#059669"; 
+            displayUser = "You"; amountColor = "#059669"; 
         }
-
         entry.innerHTML = `<div><div class="bid-user">${displayUser}</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:${amountColor}">RM ${data.currentBid.toLocaleString()}</div>`;
         list.insertBefore(entry, list.firstChild);
-        
         if(list.children.length > 6) list.removeChild(list.lastChild);
       }
     });
 
     window.placeBid = async function() {
-      if (!auth.currentUser) {
-        alert("You must log in before you can place a bid!");
-        window.__kgcOpenLogin();
-        return;
-      }
-
+      if (!auth.currentUser) { alert("You must log in before you can place a bid!"); window.__kgcOpenLogin(); return; }
       try {
         const userDocRef = doc(db, 'users', auth.currentUser.uid);
         const userSnap = await getDoc(userDocRef);
-
         if (!userSnap.exists() || userSnap.data().kycApproved !== true) {
           alert("❌ BID REJECTED\n\nYour account is pending KYC approval. You cannot bid until an Admin manually approves your account in the database.");
           return;
         }
-      } catch (err) {
-        alert("Failed to check KYC status. Check your connection.");
-        return;
-      }
+      } catch (err) { alert("Failed to check KYC status."); return; }
 
       const inputField = document.getElementById('bidField');
       const bidAmount = parseFloat(inputField.value);
 
       if (!bidAmount || bidAmount <= currentLiveBid) {
         alert("⚠️ INVALID BID\n\nYou must enter a number higher than RM " + currentLiveBid.toLocaleString());
-        inputField.value = '';
-        return;
+        inputField.value = ''; return;
       }
 
       try {
         const currentCount = parseInt(document.getElementById('bidCount').textContent) || 0;
         await updateDoc(auctionRef, {
-          currentBid: bidAmount,
-          bidCount: currentCount + 1,
-          highestBidder: auth.currentUser.displayName || auth.currentUser.email.split('@')[0]
+          currentBid: bidAmount, bitCount: currentCount + 1, highestBidder: auth.currentUser.displayName || auth.currentUser.email.split('@')[0]
         });
-        
-        inputField.value = '';
-        inputField.placeholder = 'Enter your bid (RM)';
-        alert("✅ BID PLACED SUCCESSFULLY!\n\nYou are the highest bidder at RM " + bidAmount.toLocaleString());
-      } catch (error) {
-        alert("Database Error: Could not place bid.");
-      }
+        inputField.value = ''; alert("✅ BID PLACED SUCCESSFULLY!");
+      } catch (error) { alert("Database Error."); }
     };
   </script>
 </head>
@@ -796,14 +702,8 @@
   <div class="hero-car-visual">
     <svg viewBox="0 0 600 280" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="carBody" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#E60012"/>
-          <stop offset="100%" stop-color="#FF3344"/>
-        </linearGradient>
-        <linearGradient id="carRoof" x1="150" y1="80" x2="430" y2="80" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#CC0010"/>
-          <stop offset="100%" stop-color="#E60012"/>
-        </linearGradient>
+        <linearGradient id="carBody" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E60012"/><stop offset="100%" stop-color="#FF3344"/></linearGradient>
+        <linearGradient id="carRoof" x1="150" y1="80" x2="430" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#CC0010"/><stop offset="100%" stop-color="#E60012"/></linearGradient>
       </defs>
       <ellipse cx="300" cy="240" rx="280" ry="18" fill="rgba(0,0,0,0.06)"/>
       <path d="M60 175 Q80 175 100 170 L500 170 Q540 170 550 175 L560 200 Q560 215 545 218 L55 218 Q40 215 40 200 Z" fill="url(#carBody)"/>
@@ -815,25 +715,8 @@
       <rect x="42" y="182" width="22" height="14" rx="2" fill="#B3000E"/>
       <path d="M540 195 Q565 195 575 205 L575 215 L545 215 Z" fill="#1F2937"/>
       <path d="M55 195 Q30 195 25 205 L25 215 L55 215 Z" fill="#1F2937"/>
-      <path d="M175 170 L175 218" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/>
-      <path d="M310 170 L310 218" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/>
-      <path d="M430 170 L430 218" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/>
-      <path d="M90 218 Q90 175 140 175 Q190 175 190 218" fill="#374151" stroke="#1F2937" stroke-width="1"/>
-      <path d="M400 218 Q400 175 450 175 Q500 175 500 218" fill="#374151" stroke="#1F2937" stroke-width="1"/>
       <circle cx="140" cy="218" r="38" fill="#111827" stroke="#4B5563" stroke-width="3"/>
       <circle cx="450" cy="218" r="38" fill="#111827" stroke="#4B5563" stroke-width="3"/>
-      <circle cx="140" cy="218" r="22" fill="none" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="140" y1="196" x2="140" y2="240" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="118" y1="218" x2="162" y2="218" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="125" y1="202" x2="155" y2="234" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="155" y1="202" x2="125" y2="234" stroke="#D1D5DB" stroke-width="2"/>
-      <circle cx="140" cy="218" r="8" fill="#D1D5DB"/>
-      <circle cx="450" cy="218" r="22" fill="none" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="450" y1="196" x2="450" y2="240" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="428" y1="218" x2="472" y2="218" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="434" y1="202" x2="466" y2="234" stroke="#D1D5DB" stroke-width="2"/>
-      <line x1="466" y1="202" x2="434" y2="234" stroke="#D1D5DB" stroke-width="2"/>
-      <circle cx="450" cy="218" r="8" fill="#D1D5DB"/>
       <path d="M200 130 Q280 120 380 130" stroke="rgba(255,255,255,0.4)" stroke-linecap="round" stroke-width="8" fill="none"/>
     </svg>
   </div>
@@ -849,22 +732,10 @@
   </div>
 
   <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num">2,400+</div>
-      <div class="stat-lbl">Vehicles Sold</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">35 YRS</div>
-      <div class="stat-lbl">In Business</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">RM 2B+</div>
-      <div class="stat-lbl">Transaction Value</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">99%</div>
-      <div class="stat-lbl">Client Satisfaction</div>
-    </div>
+    <div class="stat"><div class="stat-num">2,400+</div><div class="stat-lbl">Vehicles Sold</div></div>
+    <div class="stat"><div class="stat-num">35 YRS</div><div class="stat-lbl">In Business</div></div>
+    <div class="stat"><div class="stat-num">RM 2B+</div><div class="stat-lbl">Transaction Value</div></div>
+    <div class="stat"><div class="stat-num">99%</div><div class="stat-lbl">Client Satisfaction</div></div>
   </div>
 </section>
 
@@ -875,8 +746,6 @@
     <span class="ticker-item"><span class="ticker-dot"></span> Honda Odyssey 2022 — RM 195,000</span>
     <span class="ticker-item"><span class="ticker-dot"></span> Lexus LX600 — RM 780,000</span>
     <span class="ticker-item"><span class="ticker-dot"></span> Toyota Land Cruiser 300 — RM 520,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Mazda CX-8 — RM 168,000</span>
-    <span class="ticker-item"><span class="ticker-dot"></span> Subaru Forester XT — RM 145,000</span>
   </div>
 </div>
 
@@ -886,48 +755,16 @@
   <div class="about-grid">
     <div class="about-text">
       <p>Kansai Group Corporation was founded in Osaka, Japan — the heartland of Japan's automotive trade. For over 35 years, we have been exporting premium Japanese vehicles to markets across Asia, earning a reputation for transparency, quality, and unmatched selection.</p>
-      <p>Our new representative office at 3 Towers, Jalan Ampang, Kuala Lumpur marks our commitment to the Malaysian market. We bring Japan's most trusted auto auction experience directly to Malaysian buyers — both businesses and individuals.</p>
-      <p>Whether you are a dealer looking to source quality stock, or a buyer seeking your dream car at the right price, Kansai Group Corporation is your trusted Japanese automotive partner in Malaysia.</p>
       <div class="about-offices">
-        <div class="office-card">
-          <div class="office-flag">🇯🇵</div>
-          <div class="office-city">OSAKA HQ</div>
-          <div class="office-addr">1-7-22 Utsubohonmachi Nishi-ku, Osaka JAPAN 〒 550-0004, Osaka Japan — Main Operations</div>
-        </div>
-        <div class="office-card">
-          <div class="office-flag">🇲🇾</div>
-          <div class="office-city">KUALA LUMPUR</div>
-          <div class="office-addr"> Unit T3-15-20 15 Floor Tower 3 3 Towers, Jalan Ampang 50450 Kuala Lumpur</div>
-        </div>
+        <div class="office-card"><div class="office-flag">🇯🇵</div><div class="office-flag-text">OSAKA HQ</div><div class="office-addr">1-7-22 Utsubohonmachi Nishi-ku, Osaka JAPAN</div></div>
+        <div class="office-card"><div class="office-flag">🇲🇾</div><div class="office-flag-text">KUALA LUMPUR</div><div class="office-addr">3 Towers, Jalan Ampang, 50450 KL</div></div>
       </div>
     </div>
     <div class="about-visual">
       <div class="about-visual-bg">KGC</div>
       <div class="trust-grid">
-        <div class="trust-item">
-          <div class="trust-item-num">25+</div>
-          <div class="trust-item-lbl">Years Experience</div>
-        </div>
-        <div class="trust-item">
-          <div class="trust-item-num">1000+</div>
-          <div class="trust-item-lbl">Cars In Stock</div>
-        </div>
-        <div class="trust-item">
-          <div class="trust-item-num">B2B</div>
-          <div class="trust-item-lbl">Dealer Network</div>
-        </div>
-        <div class="trust-item">
-          <div class="trust-item-num">B2C</div>
-          <div class="trust-item-lbl">Direct to Buyers</div>
-        </div>
-        <div class="trust-item">
-          <div class="trust-item-num">JPN</div>
-          <div class="trust-item-lbl">Direct Sourcing</div>
-        </div>
-        <div class="trust-item">
-          <div class="trust-item-num">LIVE</div>
-          <div class="trust-item-lbl">Online Auctions</div>
-        </div>
+        <div class="trust-item"><div class="trust-item-num">25+</div><div class="trust-item-lbl">Years Experience</div></div>
+        <div class="trust-item"><div class="trust-item-num">1000+</div><div class="trust-item-lbl">Cars In Stock</div></div>
       </div>
     </div>
   </div>
@@ -937,245 +774,58 @@
   <div class="section-label">What We Offer</div>
   <h2>OUR <span class="accent">SERVICES</span></h2>
   <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M19 7h-3l-2-4H10L8 7H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-          <circle cx="8.5" cy="13.5" r="1.5"/><circle cx="15.5" cy="13.5" r="1.5"/>
-        </svg>
-      </div>
-      <h3>Direct Stock Sales</h3>
-      <p>Browse our curated inventory of premium Japanese vehicles available for direct purchase. No middleman — you buy straight from our KL stock at transparent, fixed prices.</p>
-      <span class="service-tag">Fixed Price</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      <h3>Live Online Auction</h3>
-      <p>Participate in our thrilling live auctions direct from Japan. Bid in real-time from Malaysia on hundreds of vehicles each session — registered bidders only.</p>
-      <span class="service-tag">Real-Time Bidding</span>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-      </div>
-      <h3>PEKEMA Registered Supplier</h3>
-      <p>We partner with Malaysian car dealerships to provide a consistent, reliable supply of Japanese import vehicles. Bulk sourcing, competitive rates, and JPJ-compliant documentation.</p>
-      <span class="service-tag">Bulk Wholesale</span>
-    </div>
+    <div class="service-card"><h3>Direct Stock Sales</h3><p>Browse our curated inventory of premium Japanese vehicles available for direct purchase from our KL showroom.</p></div>
+    <div class="service-card"><h3>Live Online Auction</h3><p>Participate in our thrilling live auctions direct from Japan. Bid in real-time from Malaysia.</p></div>
+    <div class="service-card"><h3>Wholesale Sourcing</h3><p>We partner with local car dealerships to provide a consistent, reliable supply of Japanese import vehicles.</p></div>
   </div>
 </section>
 
 <section id="inventory">
   <div class="inv-header">
-    <div>
-      <div class="section-label">Available Now</div>
-      <h2>OUR <span class="accent">STOCK</span> IN <span class="gold-txt">MALAYSIA</span></h2>
-    </div>
-    <a href="#contact" class="btn-outline" style="white-space:nowrap;">Request a Car</a>
+    <div><div class="section-label">Available Now</div><h2>OUR <span class="accent">STOCK</span> IN <span class="gold-txt">MALAYSIA</span></h2></div>
+    <a href="#contact" class="btn-outline">Request a Car</a>
   </div>
   <div class="inv-filter">
     <button class="filter-btn active" onclick="filterCars('all',this)">All Vehicles</button>
     <button class="filter-btn" onclick="filterCars('suv',this)">SUV / MPV</button>
     <button class="filter-btn" onclick="filterCars('sedan',this)">Sedan</button>
     <button class="filter-btn" onclick="filterCars('sports',this)">Sports</button>
-    <button class="filter-btn" onclick="filterCars('luxury',this)">Luxury</button>
   </div>
   
   <div class="cars-grid" id="carsGrid">
     <div class="car-card" data-cat="luxury suv" id="static-alphard">
       <div class="car-img">
-        <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot</div>
-        
-        <div class="car-gallery">
-          <img src="alphard1.jpg" alt="Toyota Alphard Front">
-          <img src="alphard2.jpg" alt="Toyota Alphard Interior">
-          <img src="alphard3.jpg" alt="Toyota Alphard Back">
-        </div>
+        <div class="car-gallery"><img src="alphard1.jpg" alt="Toyota Alphard"></div>
       </div>
       <div class="car-info">
-        <div class="car-make">TOYOTA</div>
-        <div class="car-model">ALPHARD 3.5 EXEC</div>
-        <div class="car-specs">
-          <span class="spec">2023</span>
-          <span class="spec">V6 3.5L</span>
-          <span class="spec">8-Seater</span>
-          <span class="spec">14,000 km</span>
-        </div>
+        <div class="car-make">TOYOTA</div><div class="car-model">ALPHARD 3.5 EXEC</div>
+        <div class="car-specs"><span class="spec">2023</span><span class="spec">14,000 km</span></div>
         <div class="car-price">285,000 <span class="currency">RM</span></div>
-        <div class="car-actions">
-          <button class="car-btn text-enquire">Enquire</button>
-          <button class="car-btn primary text-buy">Buy Now</button>
-        </div>
       </div>
     </div>
 
     <div class="car-card" data-cat="sports" id="static-gtr">
       <div class="car-img">
-        <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
-        <svg class="car-svg" width="220" height="120" viewBox="0 0 220 120">
-          <ellipse cx="110" cy="108" rx="100" ry="8" fill="rgba(0,0,0,0.05)"/>
-          <path d="M20 80 Q25 75 35 72 L185 72 Q197 72 200 78 L202 90 Q202 96 195 98 L25 98 Q18 96 18 90 Z" fill="#E60012"/>
-          <path d="M65 72 L80 50 Q92 38 112 36 L145 36 Q162 40 168 52 L178 72 Z" fill="#B3000E"/>
-          <circle cx="62" cy="98" r="16" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="62" cy="98" r="9" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <circle cx="158" cy="98" r="16" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="158" cy="98" r="9" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <rect x="190" y="78" width="12" height="8" rx="1" fill="#D4AF37"/>
-        </svg>
+        <div class="car-gallery"><img src="alphard1.jpg" alt="Nissan GTR"></div>
       </div>
       <div class="car-info">
-        <div class="car-make">NISSAN</div>
-        <div class="car-model">GT-R R35 PREMIUM</div>
-        <div class="car-specs">
-          <span class="spec">2021</span>
-          <span class="spec">Twin-Turbo 3.8L</span>
-          <span class="spec">AWD</span>
-          <span class="spec">22,000 km</span>
-        </div>
+        <div class="car-make">NISSAN</div><div class="car-model">GT-R R35 PREMIUM</div>
+        <div class="car-specs"><span class="spec">2021</span><span class="spec">22,000 km</span></div>
         <div class="car-price">620,000 <span class="currency">RM</span></div>
-        <div class="car-actions">
-          <button class="car-btn text-enquire">Enquire</button>
-          <button class="car-btn primary text-buy">Buy Now</button>
-        </div>
       </div>
     </div>
 
     <div class="car-card" data-cat="suv" id="static-lc300">
       <div class="car-img">
-        <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
-        <svg class="car-svg" width="220" height="120" viewBox="0 0 220 120">
-          <ellipse cx="110" cy="108" rx="100" ry="8" fill="rgba(0,0,0,0.05)"/>
-          <path d="M22 74 Q28 70 38 68 L182 68 Q194 68 198 74 L200 90 Q200 97 193 99 L27 99 Q20 97 20 90 Z" fill="#374151"/>
-          <path d="M55 68 L72 44 Q84 30 105 28 L135 28 Q156 30 160 44 L175 68 Z" fill="#1F2937"/>
-          <circle cx="58" cy="99" r="18" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="58" cy="99" r="10" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <circle cx="162" cy="99" r="18" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="162" cy="99" r="10" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <rect x="185" y="76" width="15" height="8" rx="1" fill="#D4AF37"/>
-          <rect x="18" y="76" width="10" height="8" rx="1" fill="#E60012"/>
-        </svg>
+        <div class="car-gallery"><img src="alphard1.jpg" alt="Land Cruiser"></div>
       </div>
       <div class="car-info">
-        <div class="car-make">TOYOTA</div>
-        <div class="car-model">LAND CRUISER 300</div>
-        <div class="car-specs">
-          <span class="spec">2022</span>
-          <span class="spec">V6 3.5L Twin Turbo</span>
-          <span class="spec">7-Seater</span>
-          <span class="spec">32,000 km</span>
-        </div>
+        <div class="car-make">TOYOTA</div><div class="car-model">LAND AMONG 300</div>
+        <div class="car-specs"><span class="spec">2022</span><span class="spec">32,000 km</span></div>
         <div class="car-price">520,000 <span class="currency">RM</span></div>
-        <div class="car-actions">
-          <button class="car-btn text-enquire">Enquire</button>
-          <button class="car-btn primary text-bid">Bid Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="car-card" data-cat="luxury sedan" id="static-lx600">
-      <div class="car-img">
-        <div class="car-img-bg"></div>
-        <div class="car-badge badge-new">New In</div>
-        <svg class="car-svg" width="220" height="120" viewBox="0 0 220 120">
-          <ellipse cx="110" cy="108" rx="100" ry="8" fill="rgba(0,0,0,0.05)"/>
-          <path d="M18 78 Q24 74 32 72 L188 72 Q198 72 202 78 L202 92 Q202 98 195 100 L25 100 Q18 98 18 92 Z" fill="#111827"/>
-          <path d="M60 72 L80 52 Q95 40 115 38 L140 38 Q158 42 162 54 L175 72 Z" fill="#1F2937"/>
-          <circle cx="55" cy="100" r="17" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="55" cy="100" r="9" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <circle cx="165" cy="100" r="17" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="165" cy="100" r="9" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <rect x="190" y="80" width="12" height="6" rx="1" fill="#D4AF37"/>
-        </svg>
-      </div>
-      <div class="car-info">
-        <div class="car-make">LEXUS</div>
-        <div class="car-model">LX 600 F-SPORT</div>
-        <div class="car-specs">
-          <span class="spec">2023</span>
-          <span class="spec">V6 3.5L Hybrid</span>
-          <span class="spec">AWD</span>
-          <span class="spec">9,000 km</span>
-        </div>
-        <div class="car-price">780,000 <span class="currency">RM</span></div>
-        <div class="car-actions">
-          <button class="car-btn text-enquire">Enquire</button>
-          <button class="car-btn primary text-buy">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="car-card" data-cat="suv" id="static-odyssey">
-      <div class="car-img">
-        <div class="car-img-bg"></div>
-        <div class="car-badge badge-hot">Hot Deal</div>
-        <svg class="car-svg" width="220" height="120" viewBox="0 0 220 120">
-          <ellipse cx="110" cy="108" rx="100" ry="8" fill="rgba(0,0,0,0.05)"/>
-          <path d="M22 76 Q28 72 36 70 L184 70 Q196 70 198 76 L200 90 Q200 97 192 99 L28 99 Q20 97 20 90 Z" fill="#6B7280"/>
-          <path d="M58 70 L76 46 Q88 33 108 31 L136 31 Q156 33 158 46 L172 70 Z" fill="#4B5563"/>
-          <circle cx="58" cy="99" r="17" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="58" cy="99" r="9" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <circle cx="160" cy="99" r="17" fill="#111827" stroke="#D1D5DB" stroke-width="2"/>
-          <circle cx="160" cy="99" r="9" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
-          <rect x="183" y="78" width="15" height="7" rx="1" fill="#D4AF37"/>
-          <rect x="18" y="78" width="10" height="7" rx="1" fill="#E60012"/>
-        </svg>
-      </div>
-      <div class="car-info">
-        <div class="car-make">HONDA</div>
-        <div class="car-model">ODYSSEY ABSOLUTE</div>
-        <div class="car-specs">
-          <span class="spec">2022</span>
-          <span class="spec">2.4L VTEC</span>
-          <span class="spec">8-Seater</span>
-          <span class="spec">18,000 km</span>
-        </div>
-        <div class="car-price">195,000 <span class="currency">RM</span></div>
-        <div class="car-actions">
-          <button class="car-btn text-enquire">Enquire</button>
-          <button class="car-btn primary text-buy">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="car-card" data-cat="sedan sports" id="static-cx8">
-      <div class="car-img">
-        <div class="car-img-bg"></div>
-        <div class="car-badge badge-auction">Auction</div>
-        <svg class="car-svg" width="220" height="120" viewBox="0 0 220 120">
-          <ellipse cx="110" cy="108" rx="100" ry="8" fill="rgba(0,0,0,0.05)"/>
-          <path d="M15 80 Q22 75 30 73 L190 73 Q200 73 205 80 L205 92 Q205 98 198 100 L22 100 Q15 98 15 92 Z" fill="#9CA3AF"/>
-          <path d="M65 73 L82 52 Q96 39 116 37 L143 37 Q160 41 163 55 L174 73 Z" fill="#D1D5DB"/>
-          <circle cx="58" cy="100" r="17" fill="#111827" stroke="#FFFFFF" stroke-width="2"/>
-          <circle cx="58" cy="100" r="10" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
-          <circle cx="162" cy="100" r="17" fill="#111827" stroke="#FFFFFF" stroke-width="2"/>
-          <circle cx="162" cy="100" r="10" fill="none" stroke="#FFFFFF" stroke-width="1.5"/>
-          <rect x="192" y="81" width="13" height="7" rx="1" fill="#D4AF37"/>
-        </svg>
-      </div>
-      <div class="car-info">
-        <div class="car-make">MAZDA</div>
-        <div class="car-model">CX-8 2.5T AWD</div>
-        <div class="car-specs">
-          <span class="spec">2023</span>
-          <span class="spec">2.5L Turbo</span>
-          <span class="spec">AWD</span>
-          <span class="spec">11,500 km</span>
-        </div>
-        <div class="car-price">168,000 <span class="currency">RM</span></div>
-        <div class="car-actions">
-          <button class="car-btn text-enquire">Enquire</button>
-          <button class="car-btn primary text-bid">Bid Now</button>
-        </div>
       </div>
     </div>
   </div>
@@ -1184,565 +834,76 @@
 <section id="auction" class="auction-bg">
   <div class="section-label">Real-Time Bidding</div>
   <h2>LIVE <span class="accent">AUCTION</span></h2>
-
-  <div class="auction-live-banner">
-    <span class="live-dot"></span>
-    <span class="live-txt">Live Session Active — Session #KGC-2024-112</span>
-  </div>
-
   <div class="auction-main">
     <div class="auction-featured">
-      <div class="auction-car-display">
-        <img src="crown.jpg" alt="Toyota Crown Live Auction" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-  
-      </div>
+      <div class="auction-car-display"><img src="crown.jpg" alt="Toyota Crown" style="width: 100%; height: 100%; object-fit: cover;"></div>
       <div class="auction-car-info">
-        <div class="car-make" style="margin-bottom:4px; font-weight: 700;">FEATURED LOT #KGC-112-07</div>
         <div class="auction-car-name">TOYOTA CROWN 2.5 RS ADVANCE</div>
-        <div class="auction-car-specs">
-          <div class="a-spec"><div class="a-spec-val">2023</div><div class="a-spec-key">Year</div></div>
-          <div class="a-spec"><div class="a-spec-val">2.5L</div><div class="a-spec-key">Engine</div></div>
-          <div class="a-spec"><div class="a-spec-val">8,200</div><div class="a-spec-key">KM</div></div>
-          <div class="a-spec"><div class="a-spec-val">Grade 4.5</div><div class="a-spec-key">Condition</div></div>
-        </div>
         <div class="bid-row">
-          <div>
-            <div class="current-bid-lbl">Current Bid</div>
-            <div class="current-bid" id="currentBid">RM 218,500</div>
-          </div>
-          <div style="text-align:right">
-            <div class="current-bid-lbl">Bidders</div>
-            <div class="current-bid" id="bidCount" style="font-size:32px; color: var(--text-main);">0</div>
-          </div>
+          <div><div class="current-bid-lbl">Current Bid</div><div class="current-bid" id="currentBid">RM 218,500</div></div>
+          <div><div class="current-bid-lbl">Bidders</div><div class="current-bid" id="bidCount" style="color: var(--text-main);">0</div></div>
         </div>
         <div class="bid-input-row">
-          <input type="number" class="bid-input" placeholder="Enter your bid (RM)" id="bidField" min="219000" step="500"/>
-          <button class="btn-primary" onclick="window.placeBid()" style="white-space:nowrap;padding:14px 28px">Place Bid</button>
+          <input type="number" class="bid-input" placeholder="Enter bid (RM)" id="bidField"/>
+          <button class="btn-primary" onclick="window.placeBid()">Place Bid</button>
         </div>
-        <p style="font-size:12px;color:var(--text-muted);margin-top:12px;font-weight:500;">Minimum increment: RM 500. Registered bidders only. KYC required.</p>
       </div>
     </div>
 
     <div class="sidebar-panel">
       <div class="countdown-box">
-        <div class="countdown-lbl">Time Remaining</div>
         <div class="countdown-digits">
-          <div class="digit-block"><div class="digit-num" id="hrs">00</div><div class="digit-lbl">Hours</div></div>
-          <div class="digit-block"><div class="digit-num" id="mins">00</div><div class="digit-lbl">Mins</div></div>
-          <div class="digit-block"><div class="digit-num" id="secs">00</div><div class="digit-lbl">Secs</div></div>
+          <div class="digit-block"><div class="digit-num" id="hrs">00</div></div>
+          <div class="digit-block"><div class="digit-num" id="mins">00</div></div>
+          <div class="digit-block"><div class="digit-num" id="secs">00</div></div>
         </div>
       </div>
-      <div class="bid-history">
-        <div class="bid-history-title">Bid History</div>
-        <div id="bidList">
-          </div>
-      </div>
-      <a href="#contact" class="btn-outline" style="text-align:center;display:block">Register to Bid</a>
+      <div class="bid-history"><div id="bidList"></div></div>
     </div>
   </div>
 </section>
 
-<section id="why" class="why-bg">
-  <div class="section-label">Our Advantage</div>
-  <h2>WHY <span class="gold-txt">KANSAI</span> GROUP?</h2>
-  <div class="why-grid">
-    <div class="why-card">
-      <div class="why-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-      </div>
-      <h3>Trusted Source</h3>
-      <p>Every vehicle sourced directly from Japan's major Kansai auction houses. No grey-market dealings, full paper trail.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-        </svg>
-      </div>
-      <h3>Pekema Registered Local KL Office</h3>
-      <p>Our Registered KL office means face-to-face meetings, test drives arranged, and real-time support for Malaysian clients.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-        </svg>
-      </div>
-      <h3>Flexible Payment</h3>
-      <p>Cash, bank transfer, and end-to-end financing assistance available. We connect you with trusted Malaysian auto loan providers.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-      </div>
-      <h3>Grade Certified</h3>
-      <p>Only Grade 3.5 and above. Full Japanese auction inspection sheet provided with each vehicle, no hidden issues.</p>
-    </div>
-  </div>
-</section>
-
-<section id="contact" class="contact-bg">
-  <div class="section-label">Get In Touch</div>
-  <h2>CONTACT <span class="accent">US</span></h2>
-  <div class="contact-grid">
-    <div>
-      <p style="color:var(--text-muted);font-size:15px;margin-bottom:28px;line-height:1.7">Whether you are looking to purchase, bid, or partner with us as a dealer, reach out and our KL team will respond within 24 hours.</p>
-      <div class="contact-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" placeholder="Your Name" id="cName"/>
-          </div>
-          <div class="form-group">
-            <label>Phone / WhatsApp</label>
-            <input type="tel" placeholder="+60 1X XXXXXXX" id="cPhone"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" placeholder="your@email.com" id="cEmail"/>
-        </div>
-        <div class="form-group">
-          <label>I Am A</label>
-          <select id="cType">
-            <option value="">Select customer type</option>
-            <option>Individual Buyer (B2C)</option>
-            <option>Car Dealer (B2B)</option>
-            <option>Corporate / Fleet</option>
-            <option>Investor / Partner</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Enquiry / Message</label>
-          <textarea placeholder="Tell us what you are looking for or any questions you have..." id="cMsg"></textarea>
-        </div>
-        <button class="btn-primary" style="width:100%;font-size:15px;padding:18px;" onclick="submitContact()">Send Enquiry</button>
-        <div class="success-msg" id="contactSuccess">✓ Thank you! Our KL team will contact you within 24 hours.</div>
-      </div>
-    </div>
-    <div class="contact-info">
-      <div class="contact-item">
-        <div class="ci-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-          </svg>
-        </div>
-        <div>
-          <div class="ci-lbl">KL Representative Office</div>
-          <div class="ci-val">3 Towers, Jalan Ampang<br>50450 Kuala Lumpur, Malaysia</div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="ci-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.36 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.55a16 16 0 0 0 6 6l1.87-1.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-        </div>
-        <div>
-          <div class="ci-lbl">WhatsApp & Phone</div>
-          <div class="ci-val">+60 1151177026 (KL Office)<br>+81 6-6445 3361 (Osaka HQ)</div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="ci-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-        </div>
-        <div>
-          <div class="ci-lbl">Email</div>
-          <div class="ci-val">sales@kansaigroupcorp.com<br>info@kansaigroupcorp.com</div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="ci-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-          </svg>
-        </div>
-        <div>
-          <div class="ci-lbl">Office Hours (KL)</div>
-          <div class="ci-val">Mon – Fri: 9:00am – 6:00pm<br>Sat: 9:00am – 5:00pm</div>
-        </div>
-      </div>
-      <div style="background:var(--bg-alt);border:1px solid var(--border);border-radius:8px;padding:24px;text-align:center;box-shadow:var(--shadow-sm);">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--text-main);text-transform:uppercase;margin-bottom:12px;font-weight:700;">WhatsApp Us Directly</div>
-        <a href="https://wa.me/6031234567" class="btn-primary" style="display:inline-block;font-size:13px;padding:14px 32px">Chat on WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-<div class="detail-drawer" id="detailDrawer">
-  <div class="drawer-close" onclick="closeDrawer()">✕</div>
-  <div class="drawer-hero">
-    <div class="drawer-hero-gallery" id="dGalleryFrame"></div>
-    <div class="drawer-grade-pill">
-      <div class="lbl">Auction Grade</div>
-      <div class="val" id="dGrade">-</div>
-    </div>
-  </div>
-  <div class="drawer-content">
-    <div class="section-label" style="margin-bottom:4px;" id="dMake">Vehicle Make</div>
-    <div class="drawer-title" id="dModel">Vehicle Asset Layout Sourcing</div>
-    <div class="drawer-price" id="dPrice">RM 000,000</div>
-    
-    <div class="drawer-specs-grid">
-      <div class="drawer-spec-item"><span class="label">Production Year</span><span class="val" id="dYear">-</span></div>
-      <div class="drawer-spec-item"><span class="label">Engine Configuration</span><span class="val" id="dEngine">-</span></div>
-      <div class="drawer-spec-item"><span class="label">Seating Layout Arrangement</span><span class="val" id="dSeats">-</span></div>
-      <div class="drawer-spec-item"><span class="label">Certified Odometer Mileage</span><span class="val" id="dMileage">-</span></div>
-    </div>
-    <button class="btn-primary" id="drawerWhatsAppBtn" style="width:100%; padding:18px;">Direct WhatsApp Inquiry</button>
-  </div>
-</div>
-
-<footer>
-  <div class="footer-grid">
-    <div class="footer-col footer-logo">
-      <div class="logo" style="margin-bottom:16px">
-        <div class="logo-mark">KG</div>
-        <div class="logo-text">
-          <div class="top">KANSAI GROUP</div>
-          <div class="btm" style="color: #9CA3AF;">Corporation &nbsp;|&nbsp; Osaka, Japan</div>
-        </div>
-      </div>
-      <p>Japan's premier auto auction company, now with a full representative office in Kuala Lumpur. Connecting Malaysian buyers to Japan's finest vehicles since 2009.</p>
-      <div class="footer-japan" style="margin-top:12px">関西グループコーポレーション</div>
-    </div>
-    <div class="footer-col">
-      <h4>Quick Links</h4>
-      <a href="#about">About Us</a>
-      <a href="#services">Our Services</a>
-      <a href="#inventory">Vehicle Inventory</a>
-      <a href="#auction">Live Auction</a>
-      <a href="#contact">Contact KL Office</a>
-    </div>
-    <div class="footer-col">
-      <h4>Services</h4>
-      <a href="#services">Direct Stock Sales</a>
-      <a href="#services">Live Online Auction</a>
-      <a href="#services">B2B Dealer Supply</a>
-      <a href="#services">Import & Shipping</a>
-      <a href="#services">Vehicle Sourcing</a>
-    </div>
-    <div class="footer-col">
-      <h4>Malaysia Office</h4>
-      <p>T3-15-20,15/F,Tower 3, 3 Towers, Jalan Ampang</p>
-      <p>50450 Kuala Lumpur</p>
-      <p style="margin-top:8px">Mon–Fri: 9am–6pm</p>
-      <p>Sat: 9am–1pm</p>
-      <p style="margin-top:8px;color:var(--gold)">SSM Reg: 202601018333</p>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 Kansai Group Malaysia Sdn. Bhd. All rights reserved.</span>
-    <span>Designed for the Malaysian Market &nbsp;🇲🇾&nbsp; Powered by Osaka Excellence 🇯🇵</span>
-  </div>
+<footer style="background:#111827; padding: 40px; text-align: center; color: white;">
+  <p>© 2026 Kansai Group Corporation. All rights reserved.</p>
 </footer>
 
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>CAR ENQUIRY</h3>
-    <p id="modalCarName">Interested in: Toyota Alphard</p>
-    <div class="contact-form" style="gap:16px">
-      <div class="form-group"><label>Your Name</label><input type="text" placeholder="Full Name" id="mName"/></div>
-      <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" placeholder="+60 1X XXXXXXX" id="mPhone"/></div>
-      <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com" id="mEmail"/></div>
-      <button class="btn-primary" style="width:100%;padding:16px;font-size:14px;margin-top:8px;" onclick="submitEnquiry()">Send Enquiry</button>
-      <div class="success-msg" id="modalSuccess">✓ Enquiry sent! Our team will call you shortly.</div>
-    </div>
-  </div>
-</div>
-
 <script>
-// Countdown timer
-let endTime = Date.now() + (2*3600 + 34*60 + 17) * 1000;
-function updateCountdown() {
-  let rem = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
-  let h = Math.floor(rem/3600);
-  let m = Math.floor((rem%3600)/60);
-  let s = rem%60;
-  document.getElementById('hrs').textContent = String(h).padStart(2,'0');
-  document.getElementById('mins').textContent = String(m).padStart(2,'0');
-  document.getElementById('secs').textContent = String(s).padStart(2,'0');
-}
-setInterval(updateCountdown, 1000);
-updateCountdown();
-
-// Filter cars
+// UI Navigation Routing
 function filterCars(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.car-card').forEach(card => {
-    if(cat === 'all' || card.dataset.cat.includes(cat)) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
+    card.style.display = (cat === 'all' || card.dataset.cat.includes(cat)) ? '' : 'none';
   });
 }
-
-// Upgraded multi-image open function
-function openDetailDrawer(make, model, price, year, engine, seats, mileage, imagesArray, grade) {
-  document.getElementById('dMake').textContent = make.toUpperCase();
-  document.getElementById('dModel').textContent = model.toUpperCase();
-  document.getElementById('dPrice').textContent = 'RM ' + price;
-  document.getElementById('dYear').textContent = year;
-  document.getElementById('dEngine').textContent = engine;
-  document.getElementById('dSeats').textContent = seats;
-  document.getElementById('dMileage').textContent = mileage;
-  document.getElementById('dGrade').textContent = grade;
-
-  // Clear out old data and build swipe images sequentially
-  const container = document.getElementById('dGalleryFrame');
-  container.innerHTML = '';
-  
-  if (Array.isArray(imagesArray) && imagesArray.length > 0) {
-    imagesArray.forEach(url => {
-      const img = document.createElement('img');
-      img.src = url;
-      img.onerror = () => { img.src = 'alphard1.jpg'; };
-      container.appendChild(img);
-    });
-  } else {
-    container.innerHTML = `<img src="alphard1.jpg">`;
-  }
-
-  document.getElementById('drawerWhatsAppBtn').onclick = function() {
-    let text = encodeURIComponent("Hello Kansai Group KL team, I would like to inquire about the availability of the " + make + " " + model + " (" + year + ") Grade " + grade + ". Please assist me with stock booking parameters.");
-    window.open("https://wa.me/601151177026?text=" + text, '_blank');
-  };
-
-  document.getElementById('drawerOverlay').classList.add('open');
-  document.getElementById('detailDrawer').classList.add('open');
-}
-
-function closeDrawer() {
-  document.getElementById('drawerOverlay').classList.remove('open');
-  document.getElementById('detailDrawer').classList.remove('open');
-}
-
-// Modal Enquiries
-function openEnquiry(carName) {
-  document.getElementById('modalCarName').textContent = 'Interested in: ' + carName;
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.getElementById('modalSuccess').style.display = 'none';
-}
-document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target===this)closeModal(); });
-
-function submitEnquiry() {
-  document.getElementById('modalSuccess').style.display = 'block';
-  setTimeout(closeModal, 2500);
-}
-
-// Fixed form trigger buttons functionality mapping 
-function submitContact() {
-  document.getElementById('contactSuccess').style.display = 'block';
-  setTimeout(()=>{ document.getElementById('contactSuccess').style.display='none'; }, 4000);
-}
-
-// Smooth scroll for nav
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    let target = document.querySelector(a.getAttribute('href'));
-    if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
-  });
-});
-
-// Nav active state on scroll
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('nav ul a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => {
-    if(window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
-  });
-  navLinks.forEach(a => {
-    a.style.color = a.getAttribute('href') === '#'+current ? 'var(--red)' : '';
-  });
-});
-</script>
-
-<div class="modal-overlay" id="authModalOverlay">
-  <div class="modal" style="max-width:460px;">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-
-    <div id="authRegisterPanel">
-      <h3>CREATE ACCOUNT</h3>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">
-        Register to bid live and track your vehicles.
-      </p>
-      <div class="contact-form" style="gap:14px;">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input id="authName" type="text" placeholder="As per MyKad / Passport"/>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input id="authEmail" type="email" placeholder="your@email.com"/>
-        </div>
-        <div class="form-group">
-          <label>Phone / WhatsApp</label>
-          <input id="authPhone" type="tel" placeholder="+60 1X XXXXXXX"/>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input id="authPassword" type="password" placeholder="Minimum 6 characters"/>
-        </div>
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <input id="authConfirm" type="password" placeholder="Re-enter password"/>
-        </div>
-
-        <div class="auth-error-box" style="display:none;background:rgba(230,0,18,0.08);
-          border:1px solid rgba(230,0,18,0.2);color:var(--red);padding:12px 16px;
-          border-radius:4px;font-size:13px;font-weight:500;"></div>
-
-        <button class="auth-submit-btn btn-primary" data-label="Create Account"
-          onclick="window.__kgcRegister()"
-          style="width:100%;padding:16px;font-size:15px;margin-top:4px;">
-          Create Account
-        </button>
-        <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:4px;">
-          Already have an account?
-          <a href="#" onclick="switchToLogin()" style="color:var(--red);font-weight:600;">
-            Log In
-          </a>
-        </p>
-      </div>
-    </div>
-
-    <div id="authLoginPanel" style="display:none;">
-      <h3>WELCOME BACK</h3>
-      <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">
-        Sign in to your Kansai Group account.
-      </p>
-      <div class="contact-form" style="gap:14px;">
-        <div class="form-group">
-          <label>Email Address</label>
-          <input id="loginEmail" type="email" placeholder="your@email.com"/>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input id="loginPassword" type="password" placeholder="Your password"/>
-        </div>
-
-        <div class="auth-error-box" style="display:none;background:rgba(230,0,18,0.08);
-          border:1px solid rgba(230,0,18,0.2);color:var(--red);padding:12px 16px;
-          border-radius:4px;font-size:13px;font-weight:500;"></div>
-
-        <button class="auth-submit-btn btn-primary" data-label="Sign In"
-          onclick="window.__kgcLogin()"
-          style="width:100%;padding:16px;font-size:15px;margin-top:4px;">
-          Sign In
-        </button>
-        <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:4px;">
-          Don't have an account?
-          <a href="#" onclick="switchToRegister()" style="color:var(--red);font-weight:600;">
-            Register
-          </a>
-        </p>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div id="kgcToast" style="
-  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#111827;color:white;padding:14px 28px;border-radius:6px;
-  font-size:14px;font-weight:500;letter-spacing:0.5px;z-index:999;
-  opacity:0;transition:all 0.35s ease;pointer-events:none;white-space:nowrap;
-  box-shadow:0 8px 24px rgba(0,0,0,0.2);">
-</div>
-
-<style>
-  #kgcToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-</style>
-
-<script>
-  // Modal open/close/switch helpers
-  function closeAuthModal() {
-    document.getElementById('authModalOverlay').classList.remove('open');
-  }
-  function switchToLogin() {
-    document.getElementById('authRegisterPanel').style.display = 'none';
-    document.getElementById('authLoginPanel').style.display = 'block';
-  }
-  function switchToRegister() {
-    document.getElementById('authLoginPanel').style.display = 'none';
-    document.getElementById('authRegisterPanel').style.display = 'block';
-  }
-  window.__kgcOpenRegister = function() {
-    switchToRegister();
-    document.getElementById('authModalOverlay').classList.add('open');
-  };
-  window.__kgcOpenLogin = function() {
-    switchToLogin();
-    document.getElementById('authModalOverlay').classList.add('open');
-  };
-  document.getElementById('authModalOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeAuthModal();
-  });
 </script>
 
 <script type="module">
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   
-  // Create static parameters routing map for fallback elements inside DOM context lookup loops
   window.localStaticVehiclesMetadata = {
-    "static-alphard": { id: "alphard-static-entry", make: "TOYOTA", model: "ALPHARD 3.5 EXEC", price: "285,000", year: "2023", engine: "V6 3.5L", seats: "8 Seats", mileage: "14,000 km", images: ["alphard1.jpg","alphard2.jpg","alphard3.jpg"], grade: "5" },
-    "static-gtr": { id: "gtr-static-entry", make: "NISSAN", model: "GT-R R35 PREMIUM", price: "620,000", year: "2021", engine: "Twin-Turbo 3.8L", seats: "4 Seats", mileage: "22,000 km", images: ["alphard1.jpg"], grade: "5" },
-    "static-lc300": { id: "lc300-static-entry", make: "TOYOTA", model: "LAND CRISER 300", price: "520,000", year: "2022", engine: "V6 3.5L Twin Turbo", seats: "7 Seats", mileage: "32,000 km", images: ["alphard1.jpg"], grade: "4.5" },
-    "static-lx600": { id: "lx600-static-entry", make: "LEXUS", model: "LX 600 F-SPORT", price: "780,000", year: "2023", engine: "V6 3.5L Hybrid", seats: "5 Seats", mileage: "9,000 km", images: ["alphard1.jpg"], grade: "5" },
-    "static-odyssey": { id: "odyssey-static-entry", make: "HONDA", model: "ODYSSEY ABSOLUTE", price: "195,000", year: "2022", engine: "2.4L VTEC", seats: "8 Seats", mileage: "18,000 km", images: ["alphard1.jpg"], grade: "4.5" },
-    "static-cx8": { id: "cx8-static-entry", make: "MAZDA", model: "CX-8 2.5T AWD", price: "168,000", year: "2023", engine: "2.5L Turbo", seats: "6 Seats", mileage: "11,500 km", images: ["alphard1.jpg"], grade: "4.5" }
+    "static-alphard": { id: "alphard", make: "TOYOTA", model: "ALPHARD 3.5 EXEC", price: "285,000", year: "2023", engine: "V6 3.5L", seats: "8", mileage: "14,000 km", grade: "5", image: "alphard1.jpg" },
+    "static-gtr": { id: "gtr", make: "NISSAN", model: "GT-R R35 PREMIUM", price: "620,000", year: "2021", engine: "Twin-Turbo 3.8L", seats: "4", mileage: "22,000 km", grade: "6A", image: "alphard1.jpg" },
+    "static-lc300": { id: "lc300", make: "TOYOTA", model: "LAND CRUISER 300", price: "520,000", year: "2022", engine: "V6 3.5L Twin Turbo", seats: "7", mileage: "32,000 km", grade: "4.5", image: "alphard1.jpg" }
   };
 
-  // Convert old style event triggers seamlessly into single page routes
-  function wireUpStaticCarsToNewLayout() {
+  function bindStaticCardsToRouting() {
     Object.keys(window.localStaticVehiclesMetadata).forEach(id => {
       const element = document.getElementById(id);
       if (!element) return;
-      
       const meta = window.localStaticVehiclesMetadata[id];
-      
-      // Route the entire card action layer
       element.onclick = () => {
-        window.location.href = `car.html?id=STATIC-${id}&make=${encodeURIComponent(meta.make)}&model=${encodeURIComponent(meta.model)}&price=${encodeURIComponent(meta.price)}&year=${encodeURIComponent(meta.year)}&engine=${encodeURIComponent(meta.engine)}&seats=${encodeURIComponent(meta.seats)}&mileage=${encodeURIComponent(meta.mileage)}&grade=${encodeURIComponent(meta.grade)}&img=${encodeURIComponent(meta.images[0])}`;
+        window.location.href = `car.html?id=STATIC-${id}&make=${encodeURIComponent(meta.make)}&model=${encodeURIComponent(meta.model)}&price=${encodeURIComponent(meta.price)}&year=${encodeURIComponent(meta.year)}&engine=${encodeURIComponent(meta.engine)}&seats=${encodeURIComponent(meta.seats)}&mileage=${encodeURIComponent(meta.mileage)}&grade=${encodeURIComponent(meta.grade)}&img=${encodeURIComponent(meta.image)}`;
       };
-
-      // Ensure button layer triggers propagate cleanly into parameters matching configuration patterns
-      element.querySelectorAll('.car-btn').forEach(btn => {
-        btn.onclick = (e) => {
-          e.stopPropagation();
-          window.location.href = `car.html?id=STATIC-${id}&make=${encodeURIComponent(meta.make)}&model=${encodeURIComponent(meta.model)}&price=${encodeURIComponent(meta.price)}&year=${encodeURIComponent(meta.year)}&engine=${encodeURIComponent(meta.engine)}&seats=${encodeURIComponent(meta.seats)}&mileage=${encodeURIComponent(meta.mileage)}&grade=${encodeURIComponent(meta.grade)}&img=${encodeURIComponent(meta.images[0])}`;
-        };
-      });
     });
   }
 
   async function loadFireCMSExtraCars() {
     try {
-      wireUpStaticCarsToNewLayout();
-      
-      const db = window.firebase ? window.firebase.firestore() : getFirestore();
+      bindStaticCardsToRouting();
+      const db = getFirestore();
       const querySnapshot = await getDocs(collection(db, "stock"));
       const grid = document.getElementById('carsGrid');
-      
       if (!grid) return;
 
       querySnapshot.forEach((carDoc) => {
@@ -1756,56 +917,30 @@ window.addEventListener('scroll', () => {
         const year = car.year || '2025';
         const engine = car.engine || '2500CC';
         const seats = car.seats || '6';
-        const category = car.category || 'luxury suv';
-        const mileage = car.mileageLog || car.mileage || 'Brand New';
+        const mileage = car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '5';
         
-        let allImages = [];
-        if (car.images && car.images.length > 0) {
-          allImages = car.images;
-        } else if (car.image) {
-          allImages = [car.image];
-        } else {
-          allImages = ['alphard1.jpg'];
-        }
+        let imgUrl = car.images && car.images.length > 0 ? car.images[0] : 'alphard1.jpg';
 
         const card = document.createElement('div');
         card.className = 'car-card';
-        card.setAttribute('data-cat', category.toLowerCase());
-        
-        card.onclick = () => {
-          window.location.href = 'car.html?id=' + id;
-        };
+        card.setAttribute('data-cat', 'suv');
+        card.onclick = () => { window.location.href = 'car.html?id=' + id; };
         
         card.innerHTML = `
           <div class="car-img">
-            <div class="car-img-bg"></div>
             <div class="car-badge badge-new">Grade ${grade}</div>
-            <div class="car-gallery">
-              <img src="${allImages[0]}" alt="${make} ${model}" onerror="this.src='alphard1.jpg'">
-            </div>
+            <div class="car-gallery"><img src="${imgUrl}" onerror="this.src='alphard1.jpg'"></div>
           </div>
           <div class="car-info">
-            <div class="car-make">${make}</div>
-            <div class="car-model">${model}</div>
-            <div class="car-specs">
-              <span class="spec">${year}</span>
-              <span class="spec">${engine}</span>
-              <span class="spec">${seats}-Seater</span>
-              <span class="spec">${mileage}</span>
-            </div>
+            <div class="car-make">${make}</div><div class="car-model">${model}</div>
+            <div class="car-specs"><span class="spec">${year}</span><span class="spec">${mileage}</span></div>
             <div class="car-price">${price} <span class="currency">RM</span></div>
-            <div class="car-actions">
-              <button class="car-btn" onclick="event.stopPropagation(); window.location.href='car.html?id=${id}'">Enquire</button>
-              <button class="car-btn primary" onclick="event.stopPropagation(); window.location.href='car.html?id=${id}'">Buy Now</button>
-            </div>
           </div>
         `;
         grid.appendChild(card);
       });
-    } catch (error) {
-      console.log("Firebase background scanner isolated.");
-    }
+    } catch (error) { console.log(error); }
   }
   setTimeout(loadFireCMSExtraCars, 1000);
 </script>
