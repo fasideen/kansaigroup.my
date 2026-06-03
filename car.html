@@ -26,10 +26,8 @@
     display: flex; align-items: center; justify-content: space-between;
   }
   .back-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    text-decoration: none; color: var(--text-main); font-family: 'Rajdhani', sans-serif;
-    font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-    cursor: pointer; background: none; border: none;
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-main); font-family: 'Rajdhani', sans-serif;
+    font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; background: none; border: none;
   }
   .back-btn:hover { color: var(--red); }
   .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; }
@@ -40,17 +38,17 @@
   .hero-viewport { width: 100%; height: 520px; background: #111827; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border); }
   .hero-viewport img { width: 100%; height: 100%; object-fit: cover; }
   
+  /* CRITICAL PREMIUM NAVY BADGE CONFIGURATION FROM SCREENSHOT */
   .screenshot-grade-badge {
     position: absolute; bottom: 24px; right: 24px; z-index: 10;
     background: #1F2937; border: 2px solid var(--gold); border-radius: 12px;
-    padding: 12px 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    min-width: 150px;
+    padding: 12px 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-width: 150px;
   }
   .screenshot-grade-badge .lbl { font-size: 9px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
   .screenshot-grade-badge .val { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--gold); letter-spacing: 1px; line-height: 1; }
 
-  .thumbnail-strip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
-  .thumbnail-strip img { width: 110px; height: 75px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; transition: border-color 0.2s; }
+  .thumbnail-strip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+  .thumbnail-strip img { width: 110px; height: 75px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; }
   .thumbnail-strip img.active { border-color: var(--red); }
 
   .title-indicator { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; font-weight: 700; }
@@ -69,29 +67,23 @@
   
   .btn-action {
     width: 100%; padding: 16px; border-radius: 6px; border: none; font-family: 'Rajdhani', sans-serif;
-    font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
-    transition: all 0.2s; text-align: center; text-decoration: none; display: block; margin-bottom: 12px;
+    font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; display: block; margin-bottom: 12px; text-align: center; text-decoration: none;
   }
-  .btn-action.primary { background: var(--red); color: white; box-shadow: 0 4px 15px rgba(230,0,18,0.2); }
-  .btn-action.primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn-action.primary { background: var(--red); color: white; }
   .btn-action.secondary { background: #FFFFFF; color: var(--text-main); border: 1px solid var(--border); }
-  .btn-action.secondary:hover { border-color: var(--text-main); }
 
   .suggestions-section { max-width: 1200px; margin: 60px auto; padding: 0 24px 80px; border-top: 1px solid var(--border); padding-top: 40px; }
-  .suggestions-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; margin-bottom: 24px; text-transform: uppercase; }
-  
+  .suggestions-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; margin-bottom: 24px; }
   .suggestions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-  .suggest-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-  .suggest-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .suggest-img { height: 140px; width: 100%; background: var(--bg-alt); position: relative; }
+  .suggest-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; }
+  .suggest-img { height: 140px; width: 100%; background: var(--bg-alt); }
   .suggest-img img { width: 100%; height: 100%; object-fit: cover; }
   .suggest-info { padding: 16px; }
-  .suggest-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .suggest-price { font-size: 18px; font-weight: 700; color: var(--red); margin-top: 4px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.5px; }
-  .suggest-badge { position: absolute; top: 8px; right: 8px; background: rgba(17,24,39,0.85); border: 1px solid var(--gold); color: var(--gold); font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-family: 'Bebas Neue', sans-serif; }
+  .suggest-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; }
+  .suggest-price { font-size: 18px; font-weight: 700; color: var(--red); font-family: 'Bebas Neue', sans-serif; }
 
   @media (max-width: 1024px) {
-    .page-container { grid-template-columns: 1fr; gap: 32px; margin: 20px auto; }
+    .page-container { grid-template-columns: 1fr; gap: 32px; }
     .sticky-sidebar { position: relative; top: auto; }
     .hero-viewport { height: 380px; }
     .suggestions-grid { grid-template-columns: repeat(2, 1fr); }
@@ -117,7 +109,7 @@
   <div class="page-container">
     <main class="main-content">
       <div class="hero-viewport">
-        <img id="mainHeroView" src="alphard1.jpg" alt="Vehicle Showcase Sourcing">
+        <img id="mainHeroView" src="alphard1.jpg" alt="Vehicle Sourcing">
         <div class="screenshot-grade-badge">
           <div class="lbl">Auction Grade</div>
           <div class="val" id="drawerGradeDisplay">-</div>
@@ -190,7 +182,7 @@
         const engine = getQueryParam('engine') || '-';
         const seats = getQueryParam('seats') || '-';
         const mileage = getQueryParam('mileage') || '-';
-        const grade = getQueryParam('grade') || 'A';
+        const grade = getQueryParam('grade') || '6A';
         const img = getQueryParam('img') || 'alphard1.jpg';
 
         document.getElementById('carMakeTxt').textContent = make;
@@ -199,15 +191,14 @@
         document.getElementById('drawerGradeDisplay').textContent = grade;
         document.getElementById('specYear').textContent = year;
         document.getElementById('specEngine').textContent = engine;
-        document.getElementById('specSeats').textContent = seats;
+        document.getElementById('specSeats').textContent = seats + '-Seater';
         document.getElementById('specMileage').textContent = mileage;
         document.getElementById('mainHeroView').src = img;
 
         document.getElementById('waInquiryBtn').onclick = function() {
-          let text = encodeURIComponent("Hello Kansai Group team, I am viewing your online individual vehicle landing asset sheet and would like to register a pricing inquiry for the " + make + " " + model + ". Please assist me with stock details.");
+          let text = encodeURIComponent("Inquiry for " + make + " " + model);
           window.open("https://wa.me/601151177026?text=" + text, '_blank');
         };
-        
         loadFooterRecommendations(carId);
         return;
       }
@@ -223,7 +214,7 @@
         const year = car.year || '2025';
         const engine = car.engine || '2500CC';
         const seats = car.seats || '7';
-        const mileage = car.mileageLog || car.mileage || 'Brand New';
+        const mileage = car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '6A';
 
         document.getElementById('carMakeTxt').textContent = make;
@@ -245,23 +236,16 @@
           const thumb = document.createElement('img');
           thumb.src = url;
           if (index === 0) thumb.className = 'active';
-          thumb.onclick = function() {
-            document.querySelectorAll('.thumbnail-strip img').forEach(i => i.classList.remove('active'));
-            thumb.className = 'active';
-            mainHeroImg.src = url;
-          };
+          thumb.onclick = function() { mainHeroImg.src = url; };
           strip.appendChild(thumb);
         });
 
         document.getElementById('waInquiryBtn').onclick = function() {
-          let text = encodeURIComponent("Hello Kansai Group team, I am viewing your online asset landing sheet and would like to register a pricing inquiry for the " + make + " " + model + " (" + year + ") Grade " + grade + ". Please assist me with booking information.");
+          let text = encodeURIComponent("Inquiry for " + make + " " + model);
           window.open("https://wa.me/601151177026?text=" + text, '_blank');
         };
-
         loadFooterRecommendations(carId);
-      } catch (e) {
-        goToInventoryHome();
-      }
+      } catch (e) { goToInventoryHome(); }
     }
 
     async function loadFooterRecommendations(currentCarId) {
@@ -270,37 +254,24 @@
         const grid = document.getElementById('suggestionsGrid');
         if (!grid) return;
         grid.innerHTML = '';
-
         let count = 0;
         querySnapshot.forEach((docSnap) => {
-          if (docSnap.id === currentCarId || docSnap.id.startsWith('sample') || count >= 4) return;
+          if (docSnap.id === currentCarId || count >= 4) return;
           const car = docSnap.data();
-          
           const make = (car.make || 'TOYOTA').toUpperCase();
           const model = (car.model || 'ALPHARD').toUpperCase();
           const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
-          const grade = car.grade || car.AuctionGrade || '5';
           let img = car.images && car.images.length > 0 ? car.images[0] : 'alphard1.jpg';
 
           const item = document.createElement('div');
           item.className = 'suggest-card';
           item.onclick = () => { window.location.href = 'car.html?id=' + docSnap.id; };
-          item.innerHTML = `
-            <div class="suggest-img">
-              <div class="suggest-badge">Grade ${grade}</div>
-              <img src="${img}" onerror="this.src='alphard1.jpg'">
-            </div>
-            <div class="suggest-info">
-              <div class="suggest-title">${make} ${model}</div>
-              <div class="suggest-price">RM ${price}</div>
-            </div>
-          `;
+          item.innerHTML = `<div class="suggest-img"><img src="${img}"></div><div class="suggest-info"><div class="suggest-title">${make} ${model}</div><div class="suggest-price">RM ${price}</div></div>`;
           grid.appendChild(item);
           count++;
         });
-      } catch (e) { console.log(e); }
+      } catch (e) {}
     }
-
     loadIndividualCarDetails();
   </script>
 </body>
