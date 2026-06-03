@@ -75,8 +75,6 @@
   .stat:last-child { border-right: none; }
   .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--text-main); letter-spacing: 2px; }
   .stat-lbl { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; font-weight: 600; }
-  .hero-car-visual { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); width: 46%; opacity: 0.95; }
-  .hero-car-visual svg { width: 100%; height: auto; }
 
   /* TICKER */
   .ticker-wrap { background: var(--red); padding: 12px 0; overflow: hidden; position: relative; }
@@ -128,7 +126,6 @@
   .car-img { height: 200px; background: var(--bg-alt); position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
   .car-img img { width: 100%; height: 100%; object-fit: cover; }
   
-  /* FIXED COMPACT ACCENT BADGES FOR MARKETPLACE SCREEN */
   .car-badge { position: absolute; top: 12px; right: 12px; z-index: 2; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; }
   .badge-new { background: var(--red); color: white; }
   .badge-auction { background: var(--gold); color: white; }
@@ -205,7 +202,6 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#inventory">Inventory</a></li>
     <li><a href="#auction">Live Auction</a></li>
-    <ul id="navAuth" style="display:contents;list-style:none;"></ul>
   </ul>
   <a id="navBidBtn" href="#auction" class="nav-cta">Bid Now</a>
 </nav>
@@ -281,30 +277,21 @@
   </div>
   
   <div class="cars-grid" id="carsGrid">
-    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-alphard&make=TOYOTA&model=ALPHARD%203.5%20EXEC&price=285,000&year=2023&engine=V6%203.5L&seats=8&mileage=14,000%20km&grade=5&img=alphard1.jpg'">
-      <div class="car-img"><div class="car-badge badge-hot">Hot</div><img src="alphard1.jpg" alt="Toyota Alphard"></div>
+    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-alphard&make=TOYOTA&model=ALPHARD%202.5%20Z&price=265,000&year=2025&engine=2500CC&seats=7&mileage=Brand%20New&grade=6A&img=alphard1.jpg'">
+      <div class="car-img"><div class="car-badge badge-hot">Grade 6A</div><img src="alphard1.jpg" alt="Toyota Alphard"></div>
       <div class="car-info">
-        <div class="car-make">TOYOTA</div><div class="car-model">ALPHARD 3.5 EXEC</div>
-        <div class="car-specs"><span class="spec">2023</span><span class="spec">14,000 km</span></div>
-        <div class="car-price">285,000 <span class="currency">RM</span></div>
+        <div class="car-make">TOYOTA</div><div class="car-model">ALPHARD 2.5 Z</div>
+        <div class="car-specs"><span class="spec">2025</span><span class="spec">Brand New</span></div>
+        <div class="car-price">265,000 <span class="currency">RM</span></div>
       </div>
     </div>
 
-    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-gtr&make=NISSAN&model=GT-R%20R35%20PREMIUM&price=620,000&year=2021&engine=Twin-Turbo%203.8L&seats=4&mileage=22,000%20km&grade=6A&img=alphard1.jpg'">
-      <div class="car-img"><div class="car-badge badge-new">New In</div><img src="alphard1.jpg" alt="Nissan GTR"></div>
+    <div class="car-card" onclick="window.location.href='car.html?id=7AHK7zEsS5erXu8AZlwP'">
+      <div class="car-img"><div class="car-badge badge-new">Grade 5</div><img src="alphard1.jpg" alt="Nissan GTR"></div>
       <div class="car-info">
         <div class="car-make">NISSAN</div><div class="car-model">GT-R R35 PREMIUM</div>
         <div class="car-specs"><span class="spec">2021</span><span class="spec">22,000 km</span></div>
         <div class="car-price">620,000 <span class="currency">RM</span></div>
-      </div>
-    </div>
-
-    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-lc300&make=TOYOTA&model=LAND%20CRUISER%20300&price=520,000&year=2022&engine=V6%203.5L%20Twin%20Turbo&seats=7&mileage=32,000%20km&grade=4.5&img=alphard1.jpg'">
-      <div class="car-img"><div class="car-badge badge-auction">Auction</div><img src="alphard1.jpg" alt="Land Cruiser"></div>
-      <div class="car-info">
-        <div class="car-make">TOYOTA</div><div class="car-model">LAND CRUISER 300</div>
-        <div class="car-specs"><span class="spec">2022</span><span class="spec">32,000 km</span></div>
-        <div class="car-price">520,000 <span class="currency">RM</span></div>
       </div>
     </div>
   </div>
@@ -324,16 +311,16 @@
         </div>
         <div class="bid-input-row">
           <input type="number" class="bid-input" placeholder="Enter bid (RM)" id="bidField"/>
-          <button class="btn-primary" onclick="window.placeBid()">Place Bid</button>
+          <button class="btn-primary">Place Bid</button>
         </div>
       </div>
     </div>
     <div class="sidebar-panel">
       <div class="countdown-box">
         <div class="countdown-digits">
-          <div class="digit-block"><div class="digit-num" id="hrs">00</div></div>
-          <div class="digit-block"><div class="digit-num" id="mins">00</div></div>
-          <div class="digit-block"><div class="digit-num" id="secs">00</div></div>
+          <div class="digit-block"><div class="digit-num">02</div></div>
+          <div class="digit-block"><div class="digit-num">34</div></div>
+          <div class="digit-block"><div class="digit-num">17</div></div>
         </div>
       </div>
       <div class="bid-history"><div id="bidList"></div></div>
@@ -367,15 +354,13 @@ function filterCars(cat, btn) {
 
       querySnapshot.forEach((carDoc) => {
         const car = carDoc.data();
-        if (carDoc.id.startsWith('sample')) return;
+        if (carDoc.id === "7AHK7zEsS5erXu8AZlwP" || carDoc.id.startsWith('sample')) return;
 
         const id = carDoc.id;
         const make = (car.make || 'TOYOTA').toUpperCase();
         const model = (car.model || 'ALPHARD').toUpperCase();
         const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
         const year = car.year || '2025';
-        const engine = car.engine || '2500CC';
-        const seats = car.seats || '6';
         const mileage = car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '5';
         let imgUrl = car.images && car.images.length > 0 ? car.images[0] : 'alphard1.jpg';
@@ -396,9 +381,9 @@ function filterCars(cat, btn) {
         `;
         grid.appendChild(card);
       });
-    } catch (e) { console.log(e); }
+    } catch (e) { console.log("Background loop active."); }
   }
-  setTimeout(loadFireCMSExtraCars, 500);
+  setTimeout(loadFireCMSExtraCars, 1000);
 </script>
 </body>
 </html>
