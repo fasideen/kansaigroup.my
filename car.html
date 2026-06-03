@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Details | KANSAI GROUP CORPORATION</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E60012;
+    --red-dark: #B3000E;
+    --gold: #D4AF37;
+    --text-main: #111827;
+    --text-muted: #6B7280;
+    --border: #E5E7EB;
+    --bg-alt: #F8F9FA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #FFFFFF; color: var(--text-main); line-height: 1.5; padding-top: 72px; }
+
+  /* NAVIGATION FIXED HEADER */
+  nav {
+    position: fixed; top: 0; width: 100%; height: 72px; z-index: 100;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none; color: var(--text-main); font-family: 'Rajdhani', sans-serif;
+    font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    cursor: pointer; background: none; border: none;
+  }
+  .back-btn:hover { color: var(--red); }
+  .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; }
+
+  /* MAIN COLUMN ARCHITECTURE */
+  .page-container { max-width: 1200px; margin: 40px auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 380px; gap: 40px; }
+  .main-content { display: flex; flex-direction: column; gap: 32px; }
+  
+  /* VIEWPORT PROFILE HERO BOX */
+  .hero-viewport { width: 100%; height: 520px; background: #111827; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--border); }
+  .hero-viewport img { width: 100%; height: 100%; object-fit: cover; }
+  
+  /* HIGH-FIDELITY GRADE BADGE OVERLAY FROM SCREENSHOT */
+  .screenshot-grade-badge {
+    position: absolute; bottom: 24px; right: 24px; z-index: 10;
+    background: #1F2937; border: 2px solid var(--gold); border-radius: 12px;
+    padding: 12px 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    min-width: 150px;
+  }
+  .screenshot-grade-badge .lbl { font-size: 9px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+  .screenshot-grade-badge .val { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--gold); letter-spacing: 1px; line-height: 1; }
+
+  /* SCROLLABLE STRIP GALLERIES */
+  .thumbnail-strip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
+  .thumbnail-strip img { width: 110px; height: 75px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; transition: border-color 0.2s; }
+  .thumbnail-strip img.active { border-color: var(--red); }
+
+  /* TEXT ARCHITECTURE LAYOUTS */
+  .title-indicator { display: flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 2px; color: var(--red); text-transform: uppercase; font-weight: 700; }
+  .title-indicator::before { content: ''; width: 24px; height: 3px; background: var(--red); }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 2px; line-height: 1; margin: 8px 0; }
+  .price-tag { font-size: 36px; font-weight: 700; color: var(--red); margin-bottom: 8px; }
+
+  /* MATRIX CONFIGURATION TABLE */
+  .specs-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .spec-row { display: flex; justify-content: space-between; padding: 16px 24px; background: #FFFFFF; font-size: 15px; }
+  .spec-row .label { color: var(--text-muted); font-weight: 500; }
+  .spec-row .value { color: var(--text-main); font-weight: 700; }
+
+  /* SIDEBAR OPTIONS PANEL */
+  .sticky-sidebar { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 112px; }
+  .action-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 32px; box-shadow: var(--shadow-sm); }
+  .action-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  
+  .btn-action {
+    width: 100%; padding: 16px; border-radius: 6px; border: none; font-family: 'Rajdhani', sans-serif;
+    font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
+    transition: all 0.2s; text-align: center; text-decoration: none; display: block; margin-bottom: 12px;
+  }
+  .btn-action.primary { background: var(--red); color: white; box-shadow: 0 4px 15px rgba(230,0,18,0.2); }
+  .btn-action.primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+  .btn-action.secondary { background: #FFFFFF; color: var(--text-main); border: 1px solid var(--border); }
+  .btn-action.secondary:hover { border-color: var(--text-main); }
+
+  /* ═══ CARS & BIDS STYLE SUGGESTIONS SECTION ═══ */
+  .suggestions-section { max-width: 1200px; margin: 60px auto; padding: 0 24px 80px; border-top: 1px solid var(--border); padding-top: 40px; }
+  .suggestions-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; margin-bottom: 24px; text-transform: uppercase; }
+  
+  .suggestions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .suggest-card { background: #FFFFFF; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+  .suggest-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .suggest-img { height: 140px; width: 100%; background: var(--bg-alt); position: relative; }
+  .suggest-img img { width: 100%; height: 100%; object-fit: cover; }
+  .suggest-info { padding: 16px; }
+  .suggest-title { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .suggest-price { font-size: 18px; font-weight: 700; color: var(--red); margin-top: 4px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.5px; }
+  .suggest-badge { position: absolute; top: 8px; right: 8px; background: rgba(17,24,39,0.85); border: 1px solid var(--gold); color: var(--gold); font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-family: 'Bebas Neue', sans-serif; }
+
+  /* SMARTPHONE COMPATIBILITY LAYER RESET */
+  @media (max-width: 1024px) {
+    .page-container { grid-template-columns: 1fr; gap: 32px; margin: 20px auto; }
+    .sticky-sidebar { position: relative; top: auto; }
+    .hero-viewport { height: 380px; }
+    .suggestions-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    h1 { font-size: 36px; }
+    .price-tag { font-size: 26px; }
+    .hero-viewport { height: 260px; }
+    .screenshot-grade-badge { bottom: 12px; right: 12px; padding: 6px 16px; min-width: 110px; }
+    .screenshot-grade-badge .val { font-size: 28px; }
+    .suggestions-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <button class="back-btn" onclick="goToInventoryHome()">← Back To Showroom</button>
+    <div class="logo-text">KANSAI GROUP</div>
+  </nav>
+
+  <div class="page-container">
+    <main class="main-content">
+      <div class="hero-viewport">
+        <img id="mainHeroView" src="alphard1.jpg" alt="Vehicle Inspection Sheet">
+        <div class="screenshot-grade-badge">
+          <div class="lbl">Auction Grade</div>
+          <div class="val" id="drawerGradeDisplay">-</div>
+        </div>
+      </div>
+      
+      <div class="thumbnail-strip" id="thumbnailsStrip"></div>
+      
+      <div>
+        <div class="title-indicator" id="carMakeTxt">TOYOTA</div>
+        <h1 id="carModelTxt">VEHICLE LOG CONTAINER</h1>
+        <div class="price-tag" id="carPriceTxt">RM ---,---</div>
+      </div>
+
+      <div class="specs-list">
+        <div class="spec-row"><span class="label">Production Year</span><span class="value" id="specYear">-</span></div>
+        <div class="spec-row"><span class="label">Engine Configuration</span><span class="value" id="specEngine">-</span></div>
+        <div class="spec-row"><span class="label">Seating Arrangement</span><span class="value" id="specSeats">-</span></div>
+        <div class="spec-row"><span class="label">Certified Odometer Mileage</span><span class="value" id="specMileage">-</span></div>
+      </div>
+    </main>
+
+    <aside class="sticky-sidebar">
+      <div class="action-card">
+        <h3>Procurement Desk</h3>
+        <button id="waInquiryBtn" class="btn-action primary">Inquire via Direct WhatsApp</button>
+        <button onclick="goToInventoryHome()" class="btn-action secondary">Back to Inventory</button>
+      </div>
+    </aside>
+  </div>
+
+  <section class="suggestions-section">
+    <h2 class="suggestions-title">More From Kansai Group Sourcing</h2>
+    <div class="suggestions-grid" id="suggestionsGrid"></div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGIqXhkC7S-eflSr9ofE6PFRd2_72pg4M",
+      authDomain: "kansai-malaysia.firebaseapp.com",
+      projectId: "kansai-malaysia",
+      storageBucket: "kansai-malaysia.firebasestorage.app",
+      messagingSenderId: "520074109100",
+      appId: "1:520074109100:web:c3938d3b0ff84f20bdff09"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function getQueryParam(param) {
+      return new URLSearchParams(window.location.search).get(param);
+    }
+
+    window.goToInventoryHome = function() {
+      window.location.href = 'index.html#inventory';
+    };
+
+    async function loadIndividualCarDetails() {
+      const carId = getQueryParam('id');
+      if (!carId) { goToInventoryHome(); return; }
+
+      try {
+        const carDoc = await getDoc(doc(db, "stock", carId));
+        if (!carDoc.exists()) { goToInventoryHome(); return; }
+
+        const car = carDoc.data();
+        const make = (car.make || 'TOYOTA').toUpperCase();
+        const model = (car.model || 'ALPHARD').toUpperCase();
+        const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
+        const year = car.year || '2025';
+        const engine = car.engine || '2500CC';
+        const seats = car.seats || '7';
+        const mileage = car.mileageLog || car.mileage || 'Brand New';
+        const grade = car.grade || car.AuctionGrade || '6A';
+
+        document.getElementById('carMakeTxt').textContent = make;
+        document.getElementById('carModelTxt').textContent = model;
+        document.getElementById('carPriceTxt').textContent = 'RM ' + price;
+        document.getElementById('drawerGradeDisplay').textContent = grade;
+        document.getElementById('specYear').textContent = year;
+        document.getElementById('specEngine').textContent = engine;
+        document.getElementById('specSeats').textContent = seats + '-Seater';
+        document.getElementById('specMileage').textContent = mileage;
+
+        let allImages = car.images && car.images.length > 0 ? car.images : ['alphard1.jpg'];
+        const mainHeroImg = document.getElementById('mainHeroView');
+        mainHeroImg.src = allImages[0];
+
+        const strip = document.getElementById('thumbnailsStrip');
+        strip.innerHTML = '';
+        allImages.forEach((url, index) => {
+          const thumb = document.createElement('img');
+          thumb.src = url;
+          if (index === 0) thumb.className = 'active';
+          thumb.onclick = function() {
+            document.querySelectorAll('.thumbnail-strip img').forEach(i => i.classList.remove('active'));
+            thumb.className = 'active';
+            mainHeroImg.src = url;
+          };
+          strip.appendChild(thumb);
+        });
+
+        document.getElementById('waInquiryBtn').onclick = function() {
+          let text = encodeURIComponent("Hello Kansai Group team, I am viewing your online asset landing sheet and would like to register a pricing inquiry for the " + make + " " + model + " (" + year + ") Grade " + grade + ". Please assist me with booking information.");
+          window.open("https://wa.me/601151177026?text=" + text, '_blank');
+        };
+
+        // LOAD AUTOMATED RECIPROCAL OPTIONS FOOTER GRID
+        loadFooterRecommendations(carId);
+
+      } catch (e) {
+        goToInventoryHome();
+      }
+    }
+
+    async function loadFooterRecommendations(currentCarId) {
+      try {
+        const querySnapshot = await getDocs(collection(db, "stock"));
+        const grid = document.getElementById('suggestionsGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        let count = 0;
+        querySnapshot.forEach((docSnap) => {
+          if (docSnap.id === currentCarId || docSnap.id.startsWith('sample') || count >= 4) return;
+          const car = docSnap.data();
+          
+          const make = (car.make || 'TOYOTA').toUpperCase();
+          const model = (car.model || 'ALPHARD').toUpperCase();
+          const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
+          const grade = car.grade || car.AuctionGrade || '5';
+          let img = car.images && car.images.length > 0 ? car.images[0] : 'alphard1.jpg';
+
+          const item = document.createElement('div');
+          item.className = 'suggest-card';
+          item.onclick = () => { window.location.href = 'car.html?id=' + docSnap.id; };
+          item.innerHTML = `
+            <div class="suggest-img">
+              <div class="suggest-badge">Grade ${grade}</div>
+              <img src="${img}" onerror="this.src='alphard1.jpg'">
+            </div>
+            <div class="suggest-info">
+              <div class="suggest-title">${make} ${model}</div>
+              <div class="suggest-price">RM ${price}</div>
+            </div>
+          `;
+          grid.appendChild(item);
+          count++;
+        });
+      } catch (e) { console.log(e); }
+    }
+
+    loadIndividualCarDetails();
+  </script>
+</body>
+</html>
