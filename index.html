@@ -834,7 +834,7 @@
       <line x1="434" y1="202" x2="466" y2="234" stroke="#D1D5DB" stroke-width="2"/>
       <line x1="466" y1="202" x2="434" y2="234" stroke="#D1D5DB" stroke-width="2"/>
       <circle cx="450" cy="218" r="8" fill="#D1D5DB"/>
-      <path d="M200 130 Q280 120 380 130" stroke="rgba(255,255,255,0.4)" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M200 130 Q280 120 380 130" stroke="rgba(255,255,255,0.4)" stroke-linecap="round" stroke-width="8" fill="none"/>
     </svg>
   </div>
 
@@ -989,7 +989,7 @@
   </div>
   
   <div class="cars-grid" id="carsGrid">
-    <div class="car-card" data-cat="luxury suv" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 3.5 EXEC', '285,000', '2023', 'V6 3.5L', '8-Seater', '14,000 km', ['alphard1.jpg','alphard2.jpg','alphard3.jpg'], '5')">
+    <div class="car-card" data-cat="luxury suv" id="static-alphard">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot</div>
@@ -1011,13 +1011,13 @@
         </div>
         <div class="car-price">285,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Toyota Alphard 3.5 Exec')">Enquire</button>
-          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Toyota Alphard 3.5 Exec')">Buy Now</button>
+          <button class="car-btn text-enquire">Enquire</button>
+          <button class="car-btn primary text-buy">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="sports" onclick="openDetailDrawer('NISSAN', 'GT-R R35 PREMIUM', '620,000', '2021', 'Twin-Turbo 3.8L', '4 Seats', '22,000 km', ['alphard1.jpg'], '5')">
+    <div class="car-card" data-cat="sports" id="static-gtr">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
@@ -1043,13 +1043,13 @@
         </div>
         <div class="car-price">620,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Nissan GT-R R35 Premium')">Enquire</button>
-          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Nissan GT-R R35 Premium')">Buy Now</button>
+          <button class="car-btn text-enquire">Enquire</button>
+          <button class="car-btn primary text-buy">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('TOYOTA', 'LAND CRUISER 300', '520,000', '2022', 'V6 3.5L Twin Turbo', '7 Seats', '32,000 km', ['alphard1.jpg'], '4.5')">
+    <div class="car-card" data-cat="suv" id="static-lc300">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
@@ -1076,13 +1076,13 @@
         </div>
         <div class="car-price">520,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Toyota Land Cruiser 300')">Enquire</button>
-          <button class="car-btn primary" onclick="event.stopPropagation(); window.location='#auction'">Bid Now</button>
+          <button class="car-btn text-enquire">Enquire</button>
+          <button class="car-btn primary text-bid">Bid Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="luxury sedan" onclick="openDetailDrawer('LEXUS', 'LX 600 F-SPORT', '780,000', '2023', 'V6 3.5L Hybrid', '5 Seats', '9,000 km', ['alphard1.jpg'], '5')">
+    <div class="car-card" data-cat="luxury sedan" id="static-lx600">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-new">New In</div>
@@ -1108,13 +1108,13 @@
         </div>
         <div class="car-price">780,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Lexus LX 600 F-Sport')">Enquire</button>
-          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Lexus LX 600 F-Sport')">Buy Now</button>
+          <button class="car-btn text-enquire">Enquire</button>
+          <button class="car-btn primary text-buy">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv" onclick="openDetailDrawer('HONDA', 'ODYSSEY ABSOLUTE', '195,000', '2022', '2.4L VTEC', '8 Seats', '18,000 km', ['alphard1.jpg'], '4.5')">
+    <div class="car-card" data-cat="suv" id="static-odyssey">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-hot">Hot Deal</div>
@@ -1141,13 +1141,13 @@
         </div>
         <div class="car-price">195,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Honda Odyssey Absolute')">Enquire</button>
-          <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('Honda Odyssey Absolute')">Buy Now</button>
+          <button class="car-btn text-enquire">Enquire</button>
+          <button class="car-btn primary text-buy">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <div class="car-card" data-cat="sedan sports" onclick="openDetailDrawer('MAZDA', 'CX-8 2.5T AWD', '168,000', '2023', '2.5L Turbo', '6 Seats', '11,500 km', ['alphard1.jpg'], '4.5')">
+    <div class="car-card" data-cat="sedan sports" id="static-cx8">
       <div class="car-img">
         <div class="car-img-bg"></div>
         <div class="car-badge badge-auction">Auction</div>
@@ -1173,8 +1173,8 @@
         </div>
         <div class="car-price">168,000 <span class="currency">RM</span></div>
         <div class="car-actions">
-          <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('Mazda CX-8 2.5T AWD')">Enquire</button>
-          <button class="car-btn primary" onclick="event.stopPropagation(); window.location='#auction'">Bid Now</button>
+          <button class="car-btn text-enquire">Enquire</button>
+          <button class="car-btn primary text-bid">Bid Now</button>
         </div>
       </div>
     </div>
@@ -1548,6 +1548,7 @@ function submitEnquiry() {
   setTimeout(closeModal, 2500);
 }
 
+// Fixed form trigger buttons functionality mapping 
 function submitContact() {
   document.getElementById('contactSuccess').style.display = 'block';
   setTimeout(()=>{ document.getElementById('contactSuccess').style.display='none'; }, 4000);
@@ -1701,8 +1702,43 @@ window.addEventListener('scroll', () => {
 <script type="module">
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   
+  // Create static parameters routing map for fallback elements inside DOM context lookup loops
+  window.localStaticVehiclesMetadata = {
+    "static-alphard": { id: "alphard-static-entry", make: "TOYOTA", model: "ALPHARD 3.5 EXEC", price: "285,000", year: "2023", engine: "V6 3.5L", seats: "8 Seats", mileage: "14,000 km", images: ["alphard1.jpg","alphard2.jpg","alphard3.jpg"], grade: "5" },
+    "static-gtr": { id: "gtr-static-entry", make: "NISSAN", model: "GT-R R35 PREMIUM", price: "620,000", year: "2021", engine: "Twin-Turbo 3.8L", seats: "4 Seats", mileage: "22,000 km", images: ["alphard1.jpg"], grade: "5" },
+    "static-lc300": { id: "lc300-static-entry", make: "TOYOTA", model: "LAND CRISER 300", price: "520,000", year: "2022", engine: "V6 3.5L Twin Turbo", seats: "7 Seats", mileage: "32,000 km", images: ["alphard1.jpg"], grade: "4.5" },
+    "static-lx600": { id: "lx600-static-entry", make: "LEXUS", model: "LX 600 F-SPORT", price: "780,000", year: "2023", engine: "V6 3.5L Hybrid", seats: "5 Seats", mileage: "9,000 km", images: ["alphard1.jpg"], grade: "5" },
+    "static-odyssey": { id: "odyssey-static-entry", make: "HONDA", model: "ODYSSEY ABSOLUTE", price: "195,000", year: "2022", engine: "2.4L VTEC", seats: "8 Seats", mileage: "18,000 km", images: ["alphard1.jpg"], grade: "4.5" },
+    "static-cx8": { id: "cx8-static-entry", make: "MAZDA", model: "CX-8 2.5T AWD", price: "168,000", year: "2023", engine: "2.5L Turbo", seats: "6 Seats", mileage: "11,500 km", images: ["alphard1.jpg"], grade: "4.5" }
+  };
+
+  // Convert old style event triggers seamlessly into single page routes
+  function wireUpStaticCarsToNewLayout() {
+    Object.keys(window.localStaticVehiclesMetadata).forEach(id => {
+      const element = document.getElementById(id);
+      if (!element) return;
+      
+      const meta = window.localStaticVehiclesMetadata[id];
+      
+      // Route the entire card action layer
+      element.onclick = () => {
+        window.location.href = `car.html?id=STATIC-${id}&make=${encodeURIComponent(meta.make)}&model=${encodeURIComponent(meta.model)}&price=${encodeURIComponent(meta.price)}&year=${encodeURIComponent(meta.year)}&engine=${encodeURIComponent(meta.engine)}&seats=${encodeURIComponent(meta.seats)}&mileage=${encodeURIComponent(meta.mileage)}&grade=${encodeURIComponent(meta.grade)}&img=${encodeURIComponent(meta.images[0])}`;
+      };
+
+      // Ensure button layer triggers propagate cleanly into parameters matching configuration patterns
+      element.querySelectorAll('.car-btn').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          window.location.href = `car.html?id=STATIC-${id}&make=${encodeURIComponent(meta.make)}&model=${encodeURIComponent(meta.model)}&price=${encodeURIComponent(meta.price)}&year=${encodeURIComponent(meta.year)}&engine=${encodeURIComponent(meta.engine)}&seats=${encodeURIComponent(meta.seats)}&mileage=${encodeURIComponent(meta.mileage)}&grade=${encodeURIComponent(meta.grade)}&img=${encodeURIComponent(meta.images[0])}`;
+        };
+      });
+    });
+  }
+
   async function loadFireCMSExtraCars() {
     try {
+      wireUpStaticCarsToNewLayout();
+      
       const db = window.firebase ? window.firebase.firestore() : getFirestore();
       const querySnapshot = await getDocs(collection(db, "stock"));
       const grid = document.getElementById('carsGrid');
@@ -1713,7 +1749,7 @@ window.addEventListener('scroll', () => {
         const car = carDoc.data();
         if (carDoc.id.startsWith('sample')) return;
 
-        const id = carDoc.id; // Grab the unique database ID for the page path
+        const id = carDoc.id;
         const make = (car.make || 'TOYOTA').toUpperCase();
         const model = (car.model || 'ALPHARD').toUpperCase();
         const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
@@ -1737,7 +1773,6 @@ window.addEventListener('scroll', () => {
         card.className = 'car-card';
         card.setAttribute('data-cat', category.toLowerCase());
         
-        // Dynamic Page Link Router (Cars & Bids Style)
         card.onclick = () => {
           window.location.href = 'car.html?id=' + id;
         };
