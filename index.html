@@ -24,35 +24,23 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); overflow-x: hidden; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg-main);
-    color: var(--text-main);
-    overflow-x: hidden;
-  }
-
-  /* ——— NAVBAR ——— */
+  /* NAVBAR */
   nav {
     position: fixed; top: 0; width: 100%; z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 48px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 72px;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between; height: 72px;
     box-shadow: var(--shadow-sm);
   }
   .logo { display: flex; align-items: center; gap: 12px; }
   .logo-mark {
-    width: 42px; height: 42px;
-    background: var(--red);
+    width: 42px; height: 42px; background: var(--red);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px; color: white; letter-spacing: 1px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: white; letter-spacing: 1px;
   }
   .logo-text { line-height: 1.1; }
   .logo-text .top { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; color: var(--text-main); }
@@ -61,269 +49,91 @@
   nav ul a { color: var(--text-muted); text-decoration: none; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; transition: color 0.2s; }
   nav ul a:hover { color: var(--red); }
   .nav-cta {
-    background: var(--red); color: white;
-    padding: 10px 24px; border: none; border-radius: 4px;
+    background: var(--red); color: white; padding: 10px 24px; border: none; border-radius: 4px;
     font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-    transition: background 0.2s, transform 0.2s; text-decoration: none;
+    letter-spacing: 2px; text-transform: uppercase; cursor: pointer; text-decoration: none;
   }
-  .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
 
-  /* ——— HERO ——— */
-  .hero {
-    min-height: 100vh;
-    position: relative;
-    display: flex; align-items: center;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg-main) 100%);
-  }
-  .hero-grid {
-    position: absolute; inset: 0; opacity: 0.3;
-    background-image:
-      linear-gradient(var(--border-soft) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-  .hero-stripe {
-    position: absolute; right: 0; top: 0; bottom: 0;
-    width: 52%;
-    background: linear-gradient(135deg, transparent 0%, rgba(230,0,18,0.03) 100%);
-    border-left: 1px solid rgba(230,0,18,0.1);
-    clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%);
-  }
-  .hero-content {
-    position: relative; z-index: 2;
-    padding: 120px 80px 80px;
-    max-width: 700px;
-  }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(230,0,18,0.08);
-    border: 1px solid rgba(230,0,18,0.15);
-    padding: 6px 16px; border-radius: 4px;
-    font-size: 11px; letter-spacing: 3px; color: var(--red);
-    text-transform: uppercase; margin-bottom: 28px;
-    font-weight: 600;
-    animation: fadeInUp 0.6s ease both;
-  }
-  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-  @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-  h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 8vw, 96px);
-    line-height: 0.95;
-    letter-spacing: 2px;
-    color: var(--text-main);
-    animation: fadeInUp 0.6s 0.1s ease both;
-  }
+  /* HERO */
+  .hero { min-height: 100vh; position: relative; display: flex; align-items: center; overflow: hidden; background: linear-gradient(135deg, var(--bg-alt) 0%, var(--bg-main) 100%); }
+  .hero-grid { position: absolute; inset: 0; opacity: 0.3; background-image: linear-gradient(var(--border-soft) 1px, transparent 1px), linear-gradient(90deg, var(--border-soft) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-stripe { position: absolute; right: 0; top: 0; bottom: 0; width: 52%; background: linear-gradient(135deg, transparent 0%, rgba(230,0,18,0.03) 100%); border-left: 1px solid rgba(230,0,18,0.1); clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%); }
+  .hero-content { position: relative; z-index: 2; padding: 120px 80px 80px; max-width: 700px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(230,0,18,0.08); border: 1px solid rgba(230,0,18,0.15); padding: 6px 16px; border-radius: 4px; font-size: 11px; letter-spacing: 3px; color: var(--red); text-transform: uppercase; margin-bottom: 28px; font-weight: 600; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 8vw, 96px); line-height: 0.95; letter-spacing: 2px; color: var(--text-main); }
   h1 span { color: var(--red); }
   h1 .gold { color: var(--gold); }
+  .hero-sub { font-size: 18px; color: var(--text-muted); line-height: 1.6; margin: 24px 0 40px; max-width: 520px; font-weight: 400; }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary { background: var(--red); color: white; padding: 16px 36px; border: none; border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(230,0,18,0.2); }
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+  .btn-outline { background: var(--bg-main); color: var(--text-main); padding: 16px 36px; border: 1px solid var(--border); border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-outline:hover { border-color: var(--red); color: var(--red); }
   
-  .hero-sub {
-    font-size: 18px; color: var(--text-muted); line-height: 1.6;
-    margin: 24px 0 40px; max-width: 520px;
-    animation: fadeInUp 0.6s 0.2s ease both;
-    font-weight: 400;
-  }
-  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeInUp 0.6s 0.3s ease both; }
-  
-  .btn-primary {
-    background: var(--red); color: white;
-    padding: 16px 36px; border: none; border-radius: 4px;
-    font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-    transition: all 0.2s; text-decoration: none; display: inline-block;
-    box-shadow: 0 4px 15px rgba(230,0,18,0.2);
-  }
-  .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230,0,18,0.3); }
-  
-  .btn-outline {
-    background: var(--bg-main); color: var(--text-main);
-    padding: 16px 36px;
-    border: 1px solid var(--border); border-radius: 4px;
-    font-family: 'Rajdhani', sans-serif; font-size: 15px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-    transition: all 0.2s; text-decoration: none; display: inline-block;
-  }
-  .btn-outline:hover { border-color: var(--red); color: var(--red); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-  
-  .hero-stats {
-    position: absolute; bottom: 60px; left: 80px; right: 80px;
-    display: flex; gap: 0; animation: fadeIn 0.8s 0.5s ease both; opacity: 0;
-    animation-fill-mode: forwards;
-    border: 1px solid var(--border); border-radius: 8px;
-    background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
-  }
+  .hero-stats { position: absolute; bottom: 60px; left: 80px; right: 80px; display: flex; gap: 0; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); box-shadow: var(--shadow-md); overflow: hidden; }
   .stat { flex: 1; padding: 20px 28px; border-right: 1px solid var(--border); text-align: center; }
   .stat:last-child { border-right: none; }
   .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--text-main); letter-spacing: 2px; }
   .stat-lbl { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; font-weight: 600; }
-
-  .hero-car-visual {
-    position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
-    width: 46%; opacity: 0.95;
-    animation: fadeIn 1s 0.4s ease both;
-  }
+  .hero-car-visual { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); width: 46%; opacity: 0.95; }
   .hero-car-visual svg { width: 100%; height: auto; }
 
-  /* ——— TICKER ——— */
-  .ticker-wrap {
-    background: var(--red); padding: 12px 0; overflow: hidden;
-    position: relative;
-  }
-  .ticker {
-    display: flex; gap: 60px; white-space: nowrap;
-    animation: ticker 30s linear infinite;
-    font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700;
-    letter-spacing: 3px; text-transform: uppercase; color: white;
-  }
+  /* TICKER */
+  .ticker-wrap { background: var(--red); padding: 12px 0; overflow: hidden; position: relative; }
+  .ticker { display: flex; gap: 60px; white-space: nowrap; animation: ticker 30s linear infinite; font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: white; }
   @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
   .ticker-item { display: flex; align-items: center; gap: 12px; }
   .ticker-dot { width: 5px; height: 5px; background: rgba(255,255,255,0.7); border-radius: 50%; }
 
-  /* ——— SECTIONS ——— */
+  /* SECTIONS */
   section { padding: 100px 80px; }
-  .section-label {
-    font-size: 11px; letter-spacing: 4px; color: var(--red);
-    text-transform: uppercase; margin-bottom: 16px;
-    display: flex; align-items: center; gap: 12px; font-weight: 700;
-  }
+  .section-label { font-size: 11px; letter-spacing: 4px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; font-weight: 700; }
   .section-label::before { content: ''; width: 32px; height: 2px; background: var(--red); }
-  h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 5vw, 64px);
-    line-height: 1; letter-spacing: 2px;
-    margin-bottom: 16px;
-  }
+  h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 64px); line-height: 1; letter-spacing: 2px; margin-bottom: 16px; }
   .accent { color: var(--red); }
   .gold-txt { color: var(--gold); }
 
-  /* ——— ABOUT ——— */
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-    align-items: center; margin-top: 60px;
-  }
-  .about-text p {
-    color: var(--text-muted); line-height: 1.8; font-size: 16px; font-weight: 400;
-    margin-bottom: 20px;
-  }
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 60px; }
+  .about-text p { color: var(--text-muted); line-height: 1.8; font-size: 16px; font-weight: 400; margin-bottom: 20px; }
   .about-offices { display: flex; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
-  .office-card {
-    flex: 1; min-width: 200px;
-    border: 1px solid var(--border);
-    border-radius: 8px; padding: 24px;
-    background: var(--bg-card);
-    position: relative; overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-  .office-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: var(--gold);
-  }
+  .office-card { flex: 1; min-width: 200px; border: 1px solid var(--border); border-radius: 8px; padding: 24px; background: var(--bg-card); position: relative; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .office-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
   .office-flag { font-size: 28px; margin-bottom: 12px; }
   .office-flag-text { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--text-main); }
   .office-addr { font-size: 13px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
-  
-  .about-visual {
-    background: var(--bg-alt);
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 40px; position: relative; overflow: hidden;
-    min-height: 380px; display: flex; flex-direction: column; justify-content: center;
-  }
-  .about-visual-bg {
-    position: absolute; inset: 0; opacity: 0.03;
-    font-family: 'Bebas Neue', sans-serif; font-size: 140px;
-    line-height: 0.9; color: var(--text-main); overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-    text-align: center; pointer-events: none; user-select: none;
-  }
+  .about-visual { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 40px; position: relative; overflow: hidden; min-height: 380px; display: flex; flex-direction: column; justify-content: center; }
+  .about-visual-bg { position: absolute; inset: 0; opacity: 0.03; font-family: 'Bebas Neue', sans-serif; font-size: 140px; line-height: 0.9; color: var(--text-main); overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; pointer-events: none; user-select: none; }
   .trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; z-index: 1; position: relative; }
-  .trust-item {
-    background: var(--bg-main); border-radius: 8px; padding: 20px;
-    border-left: 3px solid var(--red); box-shadow: var(--shadow-sm);
-  }
+  .trust-item { background: var(--bg-main); border-radius: 8px; padding: 20px; border-left: 3px solid var(--red); box-shadow: var(--shadow-sm); }
   .trust-item-num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--text-main); }
   .trust-item-lbl { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-  /* ——— SERVICES ——— */
+  /* SERVICES */
   .services-bg { background: var(--bg-alt); }
-  .services-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px;
-  }
-  .service-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 8px; padding: 36px 32px;
-    position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-    cursor: default; box-shadow: var(--shadow-sm);
-  }
-  .service-card:hover { transform: translateY(-6px); border-color: var(--border); box-shadow: var(--shadow-hover); }
-  .service-card::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-    background: var(--red); transform: scaleX(0); transition: transform 0.3s;
-  }
-  .service-card:hover::after { transform: scaleX(1); }
-  .service-icon {
-    width: 56px; height: 56px; background: rgba(230,0,18,0.05);
-    border: 1px solid rgba(230,0,18,0.1); border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 24px; color: var(--red);
-  }
-  .service-icon svg { width: 26px; height: 26px; }
-  .service-card h3 {
-    font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700;
-    letter-spacing: 1px; margin-bottom: 12px; text-transform: uppercase; color: var(--text-main);
-  }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+  .service-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 36px 32px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .service-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; text-transform: uppercase; color: var(--text-main); }
   .service-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-  .service-tag {
-    display: inline-block; margin-top: 16px;
-    background: rgba(212,175,55,0.1); color: var(--gold-dark);
-    font-size: 11px; letter-spacing: 2px; padding: 6px 12px; border-radius: 4px;
-    text-transform: uppercase; font-weight: 700;
-  }
 
-  /* ——— INVENTORY ——— */
+  /* INVENTORY DISPLAY GRID */
   .inv-header { display: flex; align-items: flex-end; justify-content: space-between; }
   .inv-filter { display: flex; gap: 8px; margin: 36px 0 28px; flex-wrap: wrap; }
-  .filter-btn {
-    padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border);
-    background: var(--bg-card); color: var(--text-muted); font-size: 12px; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; transition: all 0.2s; font-family: 'Rajdhani', sans-serif; font-weight: 700;
-  }
+  .filter-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; font-family: 'Rajdhani', sans-serif; font-weight: 700; }
   .filter-btn:hover, .filter-btn.active { background: var(--red); border-color: var(--red); color: white; }
-  
   .cars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .car-card {
-    background: var(--bg-card); border-radius: 12px; overflow: hidden;
-    border: 1px solid var(--border); transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: var(--shadow-sm); cursor: pointer;
-  }
+  
+  .car-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); cursor: pointer; position: relative; }
   .car-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
-  .car-img {
-    height: 180px; background: var(--bg-alt);
-    display: flex; align-items: center; justify-content: center; position: relative;
-    overflow: hidden; border-bottom: 1px solid var(--border);
-  }
-  .car-gallery {
-    display: flex; width: 100%; height: 100%; overflow-x: auto;
-    scroll-snap-type: x mandatory; scrollbar-width: none; position: relative; z-index: 1;
-  }
-  .car-gallery::-webkit-scrollbar { display: none; }
-  .car-gallery img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
-  .car-img-bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(230,0,18,0.03), rgba(212,175,55,0.03)); }
-  .car-svg { position: relative; z-index: 1; }
-  .car-badge {
-    position: absolute; top: 12px; right: 12px; z-index: 2;
-    padding: 6px 12px; border-radius: 4px; font-size: 11px; letter-spacing: 1px;
-    font-weight: 700; text-transform: uppercase; font-family: 'Rajdhani', sans-serif;
-  }
+  .car-img { height: 200px; background: var(--bg-alt); position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .car-img img { width: 100%; height: 100%; object-fit: cover; }
+  
+  /* FIXED COMPACT ACCENT BADGES FOR MARKETPLACE SCREEN */
+  .car-badge { position: absolute; top: 12px; right: 12px; z-index: 2; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; }
   .badge-new { background: var(--red); color: white; }
   .badge-auction { background: var(--gold); color: white; }
   .badge-hot { background: #FF6B35; color: white; }
+  
   .car-info { padding: 24px; }
   .car-make { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; font-weight: 600; }
   .car-model { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 1px; color: var(--text-main); }
@@ -332,347 +142,53 @@
   .spec::before { content: '•'; color: var(--red); }
   .car-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--text-main); letter-spacing: 1px; }
   .car-price .currency { font-size: 14px; color: var(--text-muted); margin-left: 4px; }
-  .car-actions { display: flex; gap: 8px; margin-top: 18px; }
-  
-  .car-btn {
-    flex: 1; padding: 10px; border: 1px solid var(--border);
-    background: var(--bg-alt); color: var(--text-main); font-size: 12px; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: all 0.2s;
-    font-family: 'Rajdhani', sans-serif; font-weight: 700;
-  }
-  .car-btn:hover { background: var(--border); }
-  .car-btn.primary { background: var(--red); border-color: var(--red); color: white; }
-  .car-btn.primary:hover { background: var(--red-dark); }
 
-  /* ——— AUCTION ——— */
-  .auction-bg { background: var(--bg-main); position: relative; overflow: hidden; border-top: 1px solid var(--border); }
-  .auction-bg::before {
-    content: ''; position: absolute; top: -100px; right: -100px;
-    width: 500px; height: 500px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(230,0,18,0.03) 0%, transparent 70%);
-  }
-  .auction-live-banner {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: rgba(230,0,18,0.08); border: 1px solid rgba(230,0,18,0.15);
-    padding: 10px 24px; border-radius: 6px; margin-bottom: 40px;
-  }
-  .live-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; animation: pulse 1s infinite; }
-  .live-txt { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--red); }
-  
+  /* AUCTION SECTION BLOCK */
+  .auction-bg { background: var(--bg-main); border-top: 1px solid var(--border); }
   .auction-main { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
   .auction-featured { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md); }
-  .auction-car-display { height: 280px; background: var(--bg-alt); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
-  .auction-car-display::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(230,0,18,0.02) 0%, rgba(212,175,55,0.02) 100%); }
+  .auction-car-display { height: 280px; background: var(--bg-alt); }
   .auction-car-info { padding: 32px; }
   .auction-car-name { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--text-main); }
-  .auction-car-specs { display: flex; gap: 20px; margin: 16px 0 28px; flex-wrap: wrap; }
-  .a-spec { display: flex; flex-direction: column; align-items: center; padding: 14px 20px; background: var(--bg-alt); border-radius: 8px; border: 1px solid var(--border); min-width: 90px; }
-  .a-spec-val { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-main); }
-  .a-spec-key { font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
   .bid-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
   .current-bid-lbl { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
   .current-bid { font-family: 'Bebas Neue', sans-serif; font-size: 46px; color: var(--red); letter-spacing: 2px; }
   .bid-input-row { display: flex; gap: 12px; margin-top: 24px; }
-  .bid-input { flex: 1; background: var(--bg-alt); border: 1px solid var(--border); color: var(--text-main); padding: 14px 20px; border-radius: 4px; font-size: 16px; font-family: 'Rajdhani', sans-serif; font-weight: 600; outline: none; transition: border-color 0.2s, background 0.2s; }
-  .bid-input:focus { border-color: var(--red); background: var(--bg-main); }
-  .bid-input::placeholder { color: #9CA3AF; }
-  
+  .bid-input { flex: 1; background: var(--bg-alt); border: 1px solid var(--border); color: var(--text-main); padding: 14px 20px; border-radius: 4px; font-size: 16px; outline: none; }
   .sidebar-panel { display: flex; flex-direction: column; gap: 24px; }
-  .countdown-box { background: var(--bg-card); border: 1px solid rgba(230,0,18,0.2); border-radius: 12px; padding: 28px; text-align: center; box-shadow: var(--shadow-sm); }
-  .countdown-lbl { font-size: 11px; letter-spacing: 3px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; font-weight: 700; }
+  .countdown-box { background: var(--bg-card); border: 1px solid rgba(230,0,18,0.2); border-radius: 12px; padding: 28px; text-align: center; }
   .countdown-digits { display: flex; justify-content: center; gap: 12px; }
   .digit-block { display: flex; flex-direction: column; align-items: center; background: var(--bg-alt); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--border); min-width: 66px; }
   .digit-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--text-main); line-height: 1; }
-  .digit-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--text-main); line-height: 1; }
-  .digit-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
-  
-  .bid-history { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow-sm); max-height: 280px; overflow-y: auto; }
-  .bid-history-title { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 16px; font-weight: 700; }
+  .bid-history { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-height: 280px; overflow-y: auto; }
   .bid-entry { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
-  .bid-entry:last-child { border-bottom: none; }
-  .bid-user { font-size: 13px; font-weight: 600; color: var(--text-main); }
+  .bid-user { font-size: 13px; font-weight: 600; }
   .bid-amount { font-family: 'Rajdhani', sans-serif; font-size: 15px; color: var(--text-main); font-weight: 700; }
-  .bid-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-  /* ——— WHY ——— */
-  .why-bg { background: var(--bg-alt); }
-  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 60px; }
-  .why-card { padding: 36px 24px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); text-align: center; transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); }
-  .why-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--gold); }
-  .why-icon { width: 64px; height: 64px; background: rgba(212,175,55,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--gold-dark); }
-  .why-icon svg { width: 26px; height: 26px; }
-  .why-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; color: var(--text-main); }
-  .why-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
-
-  /* ——— CONTACT ——— */
-  .contact-bg { background: var(--bg-main); border-top: 1px solid var(--border); }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 60px; }
-  .contact-form { display: flex; flex-direction: column; gap: 20px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-group label { font-size: 12px; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-  .form-group input, .form-group select, .form-group textarea { background: var(--bg-alt); border: 1px solid var(--border); color: var(--text-main); padding: 14px 18px; border-radius: 4px; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, background 0.2s; width: 100%; }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--red); background: var(--bg-main); }
-  .form-group textarea { resize: vertical; min-height: 140px; }
-  
-  .contact-info { display: flex; flex-direction: column; gap: 24px; }
-  .contact-item { display: flex; gap: 20px; align-items: flex-start; padding: 24px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-  .contact-item .ci-icon { width: 48px; height: 48px; background: rgba(230,0,18,0.05); border: 1px solid rgba(230,0,18,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--red); }
-  .contact-item .ci-icon svg { width: 22px; height: 22px; }
-  .ci-lbl { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-  .ci-val { font-size: 15px; font-weight: 600; margin-top: 6px; line-height: 1.5; color: var(--text-main); }
-
-  /* ——— FOOTER ——— */
-  footer { background: #111827; padding: 80px 80px 40px; color: #F9FAFB; }
-  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
-  .footer-col h4 { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
-  .footer-col p, .footer-col a { font-size: 13px; color: #9CA3AF; line-height: 2; text-decoration: none; display: block; transition: color 0.2s; }
-  .footer-col a:hover { color: #FFFFFF; }
-  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #9CA3AF; }
-  .footer-japan { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; color: rgba(212,175,55,0.8); }
-  .footer-logo .logo-text .top { color: white; }
-
-  /* ═══ MOBILE RESPONSIVE LAYOUT MEDIA QUERIES ═══ */
+  /* RESPONSIVE LAYOUT CONTEXT VARIABLES */
   @media(max-width: 1024px) {
     section { padding: 70px 40px; }
     nav { padding: 0 24px; }
-    nav ul { gap: 20px; }
     .hero-content { padding: 120px 40px 80px; }
     .hero-stats { position: relative; bottom: 0; left: 0; right: 0; margin-top: 40px; display: flex; flex-wrap: wrap; }
     .hero-car-visual { display: none; }
     .hero-stripe { display: none; }
-    .about-grid, .contact-grid, .auction-main { grid-template-columns: 1fr; gap: 48px; }
-    .services-grid { grid-template-columns: 1fr 1fr; }
-    .cars-grid { grid-template-columns: 1fr 1fr; }
-    .why-grid { grid-template-columns: 1fr 1fr; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .about-grid, .auction-main { grid-template-columns: 1fr; gap: 48px; }
+    .services-grid, .cars-grid { grid-template-columns: 1fr 1fr; }
   }
   @media(max-width: 640px) {
     section { padding: 60px 20px; }
     nav { padding: 0 16px; }
     nav ul { display: none; }
-    .hero { min-height: auto; padding-bottom: 40px; }
-    .hero-content { padding: 100px 0 20px; max-width: 100%; }
-    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); position: relative; bottom: auto; left: auto; right: auto; margin-top: 40px; }
-    .stat { background: white; min-width: auto; padding: 16px 10px; }
-    .services-grid, .cars-grid, .why-grid { grid-template-columns: 1fr; gap: 20px; }
-    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-    footer { padding: 60px 20px 30px; }
-    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-    .form-row { grid-template-columns: 1fr; gap: 16px; }
-    .countdown-digits { gap: 6px; }
+    .hero-content { padding: 100px 0 20px; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .stat { background: white; padding: 16px 10px; }
+    .services-grid, .cars-grid { grid-template-columns: 1fr; gap: 20px; }
     .digit-block { padding: 10px 12px; min-width: 54px; }
     .digit-num { font-size: 30px; }
     .inv-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .inv-filter { margin: 20px 0; }
   }
 </style>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged,
-      updateProfile
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    
-    import { 
-      getFirestore, 
-      doc, 
-      onSnapshot, 
-      updateDoc,
-      setDoc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBGIqXhkC7S-eflSr9ofE6PFRd2_72pg4M",
-      authDomain: "kansai-malaysia.firebaseapp.com",
-      projectId: "kansai-malaysia",
-      storageBucket: "kansai-malaysia.firebasestorage.app",
-      messagingSenderId: "520074109100",
-      appId: "1:520074109100:web:c3938d3b0ff84f20bdff09",
-      measurementId: "G-30S3E79FL1"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    onAuthStateChanged(auth, (user) => {
-      const navAuth    = document.getElementById('navAuth');
-      const navBidBtn  = document.getElementById('navBidBtn');
-      if (user) {
-        navAuth.innerHTML = `
-          <li style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:12px;color:var(--text-muted);letter-spacing:1px;font-weight:600;">
-              ${user.displayName || user.email.split('@')[0]}
-            </span>
-            <button onclick="window.__kgcSignOut()" class="nav-cta"
-              style="background:var(--bg-alt);color:var(--text-main);border:1px solid var(--border);padding:8px 16px;">
-              Sign Out
-            </button>
-          </li>`;
-        navBidBtn.textContent  = 'Bid Now';
-        navBidBtn.onclick      = () => document.querySelector('#auction').scrollIntoView({behavior:'smooth'});
-      } else {
-        navAuth.innerHTML = `
-          <li>
-            <button onclick="window.__kgcOpenLogin()" class="btn-outline"
-              style="padding:9px 20px;font-size:13px;">
-              Log In
-            </button>
-          </li>
-          <li>
-            <button onclick="window.__kgcOpenRegister()" class="nav-cta">
-              Register
-            </button>
-          </li>`;
-        navBidBtn.textContent = 'Bid Now';
-        navBidBtn.onclick     = () => window.__kgcOpenRegister();
-      }
-    });
-
-    window.__kgcRegister = async function() {
-      clearAuthErrors();
-      const name     = document.getElementById('authName').value.trim();
-      const email    = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const confirm  = document.getElementById('authConfirm').value;
-      const phone    = document.getElementById('authPhone').value.trim();
-
-      if (!name || !email || !password || !phone) return showAuthError('Please fill in all fields.');
-      if (password.length < 6) return showAuthError('Password must be at least 6 characters.');
-      if (password !== confirm) return showAuthError('Passwords do not match.');
-
-      setAuthLoading(true);
-      try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await updateProfile(cred.user, { displayName: name });
-        await setDoc(doc(db, 'users', cred.user.uid), {
-          name: name, email: email, phone: phone, kycApproved: false, createdAt: new Date().toISOString()
-        });
-        closeAuthModal();
-        showToast(`Welcome to Kansai Group, ${name}!`);
-      } catch (err) {
-        showAuthError(friendlyError(err.code));
-      } finally {
-        setAuthLoading(false);
-      }
-    };
-
-    window.__kgcLogin = async function() {
-      clearAuthErrors();
-      const email    = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      if (!email || !password) return showAuthError('Please enter your email and password.');
-
-      setAuthLoading(true);
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        closeAuthModal();
-        showToast('Welcome back!');
-      } catch (err) {
-        showAuthError(friendlyError(err.code));
-      } finally {
-        setAuthLoading(false);
-      }
-    };
-
-    window.__kgcSignOut = async function() {
-      await signOut(auth);
-      showToast('Signed out successfully.');
-    };
-
-    function friendlyError(code) {
-      const map = {
-        'auth/email-already-in-use':  'This email is already registered. Try logging in.',
-        'auth/invalid-email':          'Please enter a valid email address.',
-        'auth/wrong-password':         'Incorrect password. Please try again.',
-        'auth/user-not-found':         'No account found with this email.'
-      };
-      return map[code] || 'Something went wrong. Please try again.';
-    }
-
-    function showAuthError(msg) {
-      const els = document.querySelectorAll('.auth-error-box');
-      els.forEach(el => { el.textContent = msg; el.style.display = 'block'; });
-    }
-    
-    function clearAuthErrors() {
-      const els = document.querySelectorAll('.auth-error-box');
-      els.forEach(el => { el.textContent = ''; el.style.display = 'none'; });
-    }
-    
-    function setAuthLoading(on) {
-      const els = document.querySelectorAll('.auth-submit-btn');
-      els.forEach(btn => { btn.disabled = on; btn.textContent = on ? 'Please wait…' : btn.dataset.label; });
-    }
-    
-    function showToast(msg) {
-      const t = document.getElementById('kgcToast');
-      if (!t) return;
-      t.textContent = msg; t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 4000); 
-    }
-
-    // Live Bid Controller
-    const auctionRef = doc(db, 'auctions', 'KGC-112-07');
-    let currentLiveBid = 0;
-
-    onSnapshot(auctionRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        currentLiveBid = data.currentBid;
-        document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
-        document.getElementById('bidCount').textContent = data.bidCount;
-        
-        const list = document.getElementById('bidList');
-        const entry = document.createElement('div');
-        entry.className = 'bid-entry';
-        
-        let displayUser = data.highestBidder;
-        let amountColor = "var(--text-main)";
-        if (auth.currentUser && auth.currentUser.displayName === data.highestBidder) {
-            displayUser = "You"; amountColor = "#059669"; 
-        }
-        entry.innerHTML = `<div><div class="bid-user">${displayUser}</div><div class="bid-time">Just now</div></div><div class="bid-amount" style="color:${amountColor}">RM ${data.currentBid.toLocaleString()}</div>`;
-        list.insertBefore(entry, list.firstChild);
-        if(list.children.length > 6) list.removeChild(list.lastChild);
-      }
-    });
-
-    window.placeBid = async function() {
-      if (!auth.currentUser) { alert("You must log in before you can place a bid!"); window.__kgcOpenLogin(); return; }
-      try {
-        const userDocRef = doc(db, 'users', auth.currentUser.uid);
-        const userSnap = await getDoc(userDocRef);
-        if (!userSnap.exists() || userSnap.data().kycApproved !== true) {
-          alert("❌ BID REJECTED\n\nYour account is pending KYC approval. You cannot bid until an Admin manually approves your account in the database.");
-          return;
-        }
-      } catch (err) { alert("Failed to check KYC status."); return; }
-
-      const inputField = document.getElementById('bidField');
-      const bidAmount = parseFloat(inputField.value);
-
-      if (!bidAmount || bidAmount <= currentLiveBid) {
-        alert("⚠️ INVALID BID\n\nYou must enter a number higher than RM " + currentLiveBid.toLocaleString());
-        inputField.value = ''; return;
-      }
-
-      try {
-        const currentCount = parseInt(document.getElementById('bidCount').textContent) || 0;
-        await updateDoc(auctionRef, {
-          currentBid: bidAmount, bitCount: currentCount + 1, highestBidder: auth.currentUser.displayName || auth.currentUser.email.split('@')[0]
-        });
-        inputField.value = ''; alert("✅ BID PLACED SUCCESSFULLY!");
-      } catch (error) { alert("Database Error."); }
-    };
-  </script>
 </head>
 <body>
 
@@ -689,7 +205,6 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#inventory">Inventory</a></li>
     <li><a href="#auction">Live Auction</a></li>
-    <li><a href="#contact">Contact</a></li>
     <ul id="navAuth" style="display:contents;list-style:none;"></ul>
   </ul>
   <a id="navBidBtn" href="#auction" class="nav-cta">Bid Now</a>
@@ -698,29 +213,6 @@
 <section class="hero" id="home">
   <div class="hero-grid"></div>
   <div class="hero-stripe"></div>
-
-  <div class="hero-car-visual">
-    <svg viewBox="0 0 600 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="carBody" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E60012"/><stop offset="100%" stop-color="#FF3344"/></linearGradient>
-        <linearGradient id="carRoof" x1="150" y1="80" x2="430" y2="80" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#CC0010"/><stop offset="100%" stop-color="#E60012"/></linearGradient>
-      </defs>
-      <ellipse cx="300" cy="240" rx="280" ry="18" fill="rgba(0,0,0,0.06)"/>
-      <path d="M60 175 Q80 175 100 170 L500 170 Q540 170 550 175 L560 200 Q560 215 545 218 L55 218 Q40 215 40 200 Z" fill="url(#carBody)"/>
-      <path d="M160 170 L195 110 Q220 85 260 82 L360 82 Q400 85 415 110 L450 170 Z" fill="url(#carRoof)"/>
-      <path d="M200 168 L222 118 Q235 100 255 98 L310 98 L310 168 Z" fill="rgba(255,255,255,0.85)" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
-      <path d="M320 98 L380 98 Q398 100 407 118 L430 168 L320 168 Z" fill="rgba(255,255,255,0.75)" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>
-      <line x1="315" y1="98" x2="315" y2="170" stroke="#374151" stroke-width="4"/>
-      <rect x="530" y="182" width="28" height="14" rx="2" fill="#D4AF37"/>
-      <rect x="42" y="182" width="22" height="14" rx="2" fill="#B3000E"/>
-      <path d="M540 195 Q565 195 575 205 L575 215 L545 215 Z" fill="#1F2937"/>
-      <path d="M55 195 Q30 195 25 205 L25 215 L55 215 Z" fill="#1F2937"/>
-      <circle cx="140" cy="218" r="38" fill="#111827" stroke="#4B5563" stroke-width="3"/>
-      <circle cx="450" cy="218" r="38" fill="#111827" stroke="#4B5563" stroke-width="3"/>
-      <path d="M200 130 Q280 120 380 130" stroke="rgba(255,255,255,0.4)" stroke-linecap="round" stroke-width="8" fill="none"/>
-    </svg>
-  </div>
-
   <div class="hero-content">
     <div class="hero-tag">Now Open in Kuala Lumpur</div>
     <h1>JAPAN'S<br><span>FINEST</span><br>AUTO<br><span class="gold">AUCTION</span></h1>
@@ -783,21 +275,14 @@
 <section id="inventory">
   <div class="inv-header">
     <div><div class="section-label">Available Now</div><h2>OUR <span class="accent">STOCK</span> IN <span class="gold-txt">MALAYSIA</span></h2></div>
-    <a href="#contact" class="btn-outline">Request a Car</a>
   </div>
   <div class="inv-filter">
     <button class="filter-btn active" onclick="filterCars('all',this)">All Vehicles</button>
-    <button class="filter-btn" onclick="filterCars('suv',this)">SUV / MPV</button>
-    <button class="filter-btn" onclick="filterCars('sedan',this)">Sedan</button>
-    <button class="filter-btn" onclick="filterCars('sports',this)">Sports</button>
   </div>
   
   <div class="cars-grid" id="carsGrid">
-    <div class="car-card" data-cat="luxury suv" id="static-alphard">
-      <div class="car-img">
-        <div class="car-badge badge-hot">Hot</div>
-        <div class="car-gallery"><img src="alphard1.jpg" alt="Toyota Alphard"></div>
-      </div>
+    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-alphard&make=TOYOTA&model=ALPHARD%203.5%20EXEC&price=285,000&year=2023&engine=V6%203.5L&seats=8&mileage=14,000%20km&grade=5&img=alphard1.jpg'">
+      <div class="car-img"><div class="car-badge badge-hot">Hot</div><img src="alphard1.jpg" alt="Toyota Alphard"></div>
       <div class="car-info">
         <div class="car-make">TOYOTA</div><div class="car-model">ALPHARD 3.5 EXEC</div>
         <div class="car-specs"><span class="spec">2023</span><span class="spec">14,000 km</span></div>
@@ -805,11 +290,8 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="sports" id="static-gtr">
-      <div class="car-img">
-        <div class="car-badge badge-new">New In</div>
-        <div class="car-gallery"><img src="alphard1.jpg" alt="Nissan GTR"></div>
-      </div>
+    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-gtr&make=NISSAN&model=GT-R%20R35%20PREMIUM&price=620,000&year=2021&engine=Twin-Turbo%203.8L&seats=4&mileage=22,000%20km&grade=6A&img=alphard1.jpg'">
+      <div class="car-img"><div class="car-badge badge-new">New In</div><img src="alphard1.jpg" alt="Nissan GTR"></div>
       <div class="car-info">
         <div class="car-make">NISSAN</div><div class="car-model">GT-R R35 PREMIUM</div>
         <div class="car-specs"><span class="spec">2021</span><span class="spec">22,000 km</span></div>
@@ -817,13 +299,10 @@
       </div>
     </div>
 
-    <div class="car-card" data-cat="suv" id="static-lc300">
-      <div class="car-img">
-        <div class="car-badge badge-auction">Auction</div>
-        <div class="car-gallery"><img src="alphard1.jpg" alt="Land Cruiser"></div>
-      </div>
+    <div class="car-card" onclick="window.location.href='car.html?id=STATIC-lc300&make=TOYOTA&model=LAND%20CRUISER%20300&price=520,000&year=2022&engine=V6%203.5L%20Twin%20Turbo&seats=7&mileage=32,000%20km&grade=4.5&img=alphard1.jpg'">
+      <div class="car-img"><div class="car-badge badge-auction">Auction</div><img src="alphard1.jpg" alt="Land Cruiser"></div>
       <div class="car-info">
-        <div class="car-make">TOYOTA</div><div class="car-model">LAND AMONG 300</div>
+        <div class="car-make">TOYOTA</div><div class="car-model">LAND CRUISER 300</div>
         <div class="car-specs"><span class="spec">2022</span><span class="spec">32,000 km</span></div>
         <div class="car-price">520,000 <span class="currency">RM</span></div>
       </div>
@@ -849,7 +328,6 @@
         </div>
       </div>
     </div>
-
     <div class="sidebar-panel">
       <div class="countdown-box">
         <div class="countdown-digits">
@@ -868,7 +346,6 @@
 </footer>
 
 <script>
-// UI Navigation Routing
 function filterCars(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -881,26 +358,8 @@ function filterCars(cat, btn) {
 <script type="module">
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   
-  window.localStaticVehiclesMetadata = {
-    "static-alphard": { id: "alphard", make: "TOYOTA", model: "ALPHARD 3.5 EXEC", price: "285,000", year: "2023", engine: "V6 3.5L", seats: "8", mileage: "14,000 km", grade: "5", image: "alphard1.jpg" },
-    "static-gtr": { id: "gtr", make: "NISSAN", model: "GT-R R35 PREMIUM", price: "620,000", year: "2021", engine: "Twin-Turbo 3.8L", seats: "4", mileage: "22,000 km", grade: "6A", image: "alphard1.jpg" },
-    "static-lc300": { id: "lc300", make: "TOYOTA", model: "LAND CRUISER 300", price: "520,000", year: "2022", engine: "V6 3.5L Twin Turbo", seats: "7", mileage: "32,000 km", grade: "4.5", image: "alphard1.jpg" }
-  };
-
-  function bindStaticCardsToRouting() {
-    Object.keys(window.localStaticVehiclesMetadata).forEach(id => {
-      const element = document.getElementById(id);
-      if (!element) return;
-      const meta = window.localStaticVehiclesMetadata[id];
-      element.onclick = () => {
-        window.location.href = `car.html?id=STATIC-${id}&make=${encodeURIComponent(meta.make)}&model=${encodeURIComponent(meta.model)}&price=${encodeURIComponent(meta.price)}&year=${encodeURIComponent(meta.year)}&engine=${encodeURIComponent(meta.engine)}&seats=${encodeURIComponent(meta.seats)}&mileage=${encodeURIComponent(meta.mileage)}&grade=${encodeURIComponent(meta.grade)}&img=${encodeURIComponent(meta.image)}`;
-      };
-    });
-  }
-
   async function loadFireCMSExtraCars() {
     try {
-      bindStaticCardsToRouting();
       const db = getFirestore();
       const querySnapshot = await getDocs(collection(db, "stock"));
       const grid = document.getElementById('carsGrid');
@@ -919,18 +378,15 @@ function filterCars(cat, btn) {
         const seats = car.seats || '6';
         const mileage = car.mileage || 'Brand New';
         const grade = car.grade || car.AuctionGrade || '5';
-        
         let imgUrl = car.images && car.images.length > 0 ? car.images[0] : 'alphard1.jpg';
 
         const card = document.createElement('div');
         card.className = 'car-card';
-        card.setAttribute('data-cat', 'suv');
         card.onclick = () => { window.location.href = 'car.html?id=' + id; };
-        
         card.innerHTML = `
           <div class="car-img">
             <div class="car-badge badge-new">Grade ${grade}</div>
-            <div class="car-gallery"><img src="${imgUrl}" onerror="this.src='alphard1.jpg'"></div>
+            <img src="${imgUrl}" onerror="this.src='alphard1.jpg'">
           </div>
           <div class="car-info">
             <div class="car-make">${make}</div><div class="car-model">${model}</div>
@@ -940,9 +396,9 @@ function filterCars(cat, btn) {
         `;
         grid.appendChild(card);
       });
-    } catch (error) { console.log(error); }
+    } catch (e) { console.log(e); }
   }
-  setTimeout(loadFireCMSExtraCars, 1000);
+  setTimeout(loadFireCMSExtraCars, 500);
 </script>
 </body>
 </html>
