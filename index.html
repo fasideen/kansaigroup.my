@@ -1701,9 +1701,6 @@ window.addEventListener('scroll', () => {
 <script type="module">
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   
-  // Safe background inventory storage dictionary away from runtime environment array allocations
-  window.cloudCarImagesMemory = {};
-
   async function loadFireCMSExtraCars() {
     try {
       const db = window.firebase ? window.firebase.firestore() : getFirestore();
@@ -1716,7 +1713,7 @@ window.addEventListener('scroll', () => {
         const car = carDoc.data();
         if (carDoc.id.startsWith('sample')) return;
 
-        const id = carDoc.id;
+        const id = carDoc.id; // Grab the unique database ID for the page path
         const make = (car.make || 'TOYOTA').toUpperCase();
         const model = (car.model || 'ALPHARD').toUpperCase();
         const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
@@ -1736,16 +1733,13 @@ window.addEventListener('scroll', () => {
           allImages = ['alphard1.jpg'];
         }
 
-        // Cache the parsed multi-image paths globally by dynamic ID pointer reference
-        window.cloudCarImagesMemory[id] = allImages;
-
         const card = document.createElement('div');
         card.className = 'car-card';
         card.setAttribute('data-cat', category.toLowerCase());
         
-        // Pass lookups safely via reference string pointers
+        // Dynamic Page Link Router (Cars & Bids Style)
         card.onclick = () => {
-          openDetailDrawerWithMemory(make, model, price, year, engine, seats + '-Seater', mileage, id, grade);
+          window.location.href = 'car.html?id=' + id;
         };
         
         card.innerHTML = `
@@ -1767,8 +1761,8 @@ window.addEventListener('scroll', () => {
             </div>
             <div class="car-price">${price} <span class="currency">RM</span></div>
             <div class="car-actions">
-              <button class="car-btn" onclick="event.stopPropagation(); openEnquiry('${make} ${model}')">Enquire</button>
-              <button class="car-btn primary" onclick="event.stopPropagation(); openEnquiry('${make} ${model}')">Buy Now</button>
+              <button class="car-btn" onclick="event.stopPropagation(); window.location.href='car.html?id=${id}'">Enquire</button>
+              <button class="car-btn primary" onclick="event.stopPropagation(); window.location.href='car.html?id=${id}'">Buy Now</button>
             </div>
           </div>
         `;
@@ -1778,15 +1772,6 @@ window.addEventListener('scroll', () => {
       console.log("Firebase background scanner isolated.");
     }
   }
-
-  // Intermediary lookup handler map
-  window.openDetailDrawerWithMemory = function(make, model, price, year, engine, seats, mileage, id, grade) {
-    const imagesArray = window.cloudCarImagesMemory[id] || ['alphard1.jpg'];
-    if (typeof openDetailDrawer === 'function') {
-      openDetailDrawer(make, model, price, year, engine, seats, mileage, imagesArray, grade);
-    }
-  };
-
   setTimeout(loadFireCMSExtraCars, 1000);
 </script>
 </body>
