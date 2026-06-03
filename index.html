@@ -137,7 +137,6 @@
   .cars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .car-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); position: relative; }
   .car-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
-  
   .car-img { height: 180px; background: var(--bg-alt); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
   .car-gallery { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; position: relative; z-index: 1; }
   .car-gallery::-webkit-scrollbar { display: none; }
@@ -145,7 +144,7 @@
   .car-img-bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(230,0,18,0.03), rgba(212,175,55,0.03)); }
   .car-svg { position: relative; z-index: 1; }
 
-  /* EXPLICIT DESIGN ACCORDING TO SCREENSHOT MANIFEST */
+  /* CRITICAL JPN AUCTION GRADE BADGE OVERLAY DESIGN NATIVE IN HOMEPAGE CARDS */
   .car-badge-premium-screenshot {
     position: absolute; bottom: 12px; right: 12px; z-index: 10;
     background: #1F2937; border: 1.5px solid var(--gold); border-radius: 8px;
@@ -163,7 +162,6 @@
   .car-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--text-main); letter-spacing: 1px; }
   .car-price .currency { font-size: 14px; color: var(--text-muted); margin-left: 4px; }
   .car-actions { display: flex; gap: 8px; margin-top: 18px; }
-  
   .car-btn { flex: 1; padding: 10px; border: 1px solid var(--border); background: var(--bg-alt); color: var(--text-main); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: all 0.2s; font-family: 'Rajdhani', sans-serif; font-weight: 700; }
   .car-btn:hover { background: var(--border); }
   .car-btn.primary { background: var(--red); border-color: var(--red); color: white; }
@@ -196,4 +194,480 @@
   .countdown-box { background: var(--bg-card); border: 1px solid rgba(230,0,18,0.2); border-radius: 12px; padding: 28px; text-align: center; box-shadow: var(--shadow-sm); }
   .countdown-lbl { font-size: 11px; letter-spacing: 3px; color: var(--red); text-transform: uppercase; margin-bottom: 16px; font-weight: 700; }
   .countdown-digits { display: flex; justify-content: center; gap: 12px; }
-  .digit-block { display: flex; flex-direction: column; align-items: center; background: var(--bg-alt); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--
+  .digit-block { display: flex; flex-direction: column; align-items: center; background: var(--bg-alt); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--border); min-width: 66px; }
+  .digit-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: var(--text-main); line-height: 1; }
+  .digit-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-weight: 600; }
+  .bid-history { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: var(--shadow-sm); max-height: 280px; overflow-y: auto; }
+  .bid-history-title { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 16px; font-weight: 700; }
+  .bid-entry { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
+  .bid-user { font-size: 13px; font-weight: 600; color: var(--text-main); }
+  .bid-amount { font-family: 'Rajdhani', sans-serif; font-size: 15px; color: var(--text-main); font-weight: 700; }
+
+  /* ——— WHY ——— */
+  .why-bg { background: var(--bg-alt); }
+  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 60px; }
+  .why-card { padding: 36px 24px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); text-align: center; transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); }
+  .why-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: var(--gold); }
+  .why-icon { width: 64px; height: 64px; background: rgba(212,175,55,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--gold-dark); }
+  .why-icon svg { width: 30px; height: 30px; }
+  .why-card h3 { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; color: var(--text-main); }
+  .why-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  /* ——— CONTACT ——— */
+  .contact-bg { background: var(--bg-main); border-top: 1px solid var(--border); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 60px; }
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 12px; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+  .form-group input, .form-group select, .form-group textarea { background: var(--bg-alt); border: 1px solid var(--border); color: var(--text-main); padding: 14px 18px; border-radius: 4px; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, background 0.2s; width: 100%; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--red); background: var(--bg-main); }
+  .form-group textarea { resize: vertical; min-height: 140px; }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-item { display: flex; gap: 20px; align-items: flex-start; padding: 24px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+  .contact-item .ci-icon { width: 48px; height: 48px; background: rgba(230,0,18,0.05); border: 1px solid rgba(230,0,18,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--red); }
+  .contact-item .ci-icon svg { width: 22px; height: 22px; }
+  .ci-lbl { font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+  .ci-val { font-size: 15px; font-weight: 600; margin-top: 6px; line-height: 1.5; color: var(--text-main); }
+
+  /* ——— FOOTER ——— */
+  footer { background: #111827; padding: 80px 80px 40px; color: #F9FAFB; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+  .footer-col h4 { font-family: 'Rajdhani', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .footer-col p, .footer-col a { font-size: 13px; color: #9CA3AF; line-height: 2; text-decoration: none; display: block; transition: color 0.2s; }
+  .footer-col a:hover { color: #FFFFFF; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #9CA3AF; }
+  .footer-japan { font-family: 'Noto Sans JP', sans-serif; font-size: 14px; color: rgba(212,175,55,0.8); }
+  .footer-logo .logo-text .top { color: white; }
+
+  /* ——— UPGRADED MULTI-IMAGE DRAWER STYLES ——— */
+  .drawer-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.4); backdrop-filter: blur(4px); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+  .detail-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 560px; background: var(--bg-main); z-index: 201; box-shadow: -10px 0 40px rgba(0,0,0,0.15); transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; }
+  .detail-drawer.open { transform: translateX(0); }
+  .drawer-close { position: absolute; top: 24px; left: -56px; background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; box-shadow: -4px 4px 12px rgba(0,0,0,0.08); }
+  .drawer-close:hover { background: var(--red); color: white; }
+  
+  .drawer-hero { height: 320px; background: #111827; position: relative; }
+  .drawer-hero-gallery { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .drawer-hero-gallery::-webkit-scrollbar { display: none; }
+  .drawer-hero-gallery img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
+
+  /* HIGH-FIDELITY GRADE DESIGN FROM SCREENSHOT */
+  .drawer-hero .screenshot-grade-badge-overlay {
+    position: absolute; bottom: 16px; right: 16px; z-index: 15;
+    background: #1F2937; border: 2px solid var(--gold); border-radius: 10px;
+    padding: 8px 20px; text-align: center; min-width: 120px; box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+  }
+  .drawer-hero .screenshot-grade-badge-overlay .lbl { font-size: 8px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 2px; line-height: 1; }
+  .drawer-hero .screenshot-grade-badge-overlay .val { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); line-height: 1; }
+  
+  .drawer-content { padding: 40px; overflow-y: auto; flex: 1; }
+  .drawer-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; color: var(--text-main); line-height: 1.1; }
+  .drawer-price { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--red); margin: 8px 0 32px; }
+  .drawer-specs-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+  .drawer-spec-item { display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+  .drawer-spec-item .label { color: var(--text-muted); font-weight: 500; }
+  .drawer-spec-item .val { color: var(--text-main); font-weight: 600; }
+
+  /* ═══ CLEAN, RE-SCRUBBED SMARTPHONE MEDIA BREAKPOINTS ═══ */
+  @media(max-width: 1024px) {
+    section { padding: 70px 40px; } nav { padding: 0 24px; } nav ul { gap: 20px; }
+    .hero-content { padding: 120px 40px 80px; }
+    .hero-stats { position: relative; bottom: 0; left: 0; right: 0; margin-top: 40px; display: flex; flex-wrap: wrap; }
+    .hero-car-visual, .hero-stripe { display: none; }
+    .about-grid, .contact-grid, .auction-main { grid-template-columns: 1fr; gap: 48px; }
+    .services-grid, .cars-grid, .why-grid, .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media(max-width: 640px) {
+    section { padding: 60px 20px; } nav { padding: 0 16px; } nav ul { display: none; }
+    .hero-content { padding: 100px 0 20px; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); position: relative; margin-top: 40px; }
+    .stat { background: white; padding: 16px 10px; }
+    .services-grid, .cars-grid, .why-grid, .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+    footer { padding: 50px 20px 24px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .form-row { grid-template-columns: 1fr; }
+    .countdown-digits { gap: 6px; }
+    .digit-block { padding: 10px 12px; min-width: 54px; } .digit-num { font-size: 30px; }
+    .detail-drawer { max-width: 100%; } .drawer-close { left: auto; right: 16px; top: 16px; background: rgba(255,255,255,0.9); }
+  }
+
+  /* Modal Setup Panels */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--bg-main); border: 1px solid var(--border); border-radius: 12px; padding: 40px; max-width: 480px; width: 90%; transform: translateY(20px); transition: transform 0.3s; position: relative; box-shadow: var(--shadow-hover); }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+  .modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; margin-bottom: 8px; color: var(--text-main); }
+  .modal p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+  .success-msg { display: none; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 16px; border-radius: 4px; color: #059669; font-size: 14px; text-align: center; margin-top: 16px; font-weight: 500; }
+</style>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, updateDoc, collection, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGIqXhkC7S-eflSr9ofE6PFRd2_72pg4M",
+      authDomain: "kansai-malaysia.firebaseapp.com",
+      projectId: "kansai-malaysia",
+      storageBucket: "kansai-malaysia.firebasestorage.app",
+      messagingSenderId: "520074109100",
+      appId: "1:520074109100:web:c3938d3b0ff84f20bdff09",
+      measurementId: "G-30S3E79FL1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, (user) => {
+      const navAuth = document.getElementById('navAuth');
+      if (user) {
+        navAuth.innerHTML = `<li style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:var(--text-muted);font-weight:600;">${user.displayName || user.email.split('@')[0]}</span><button onclick="window.__kgcSignOut()" class="nav-cta" style="background:var(--bg-alt);color:var(--text-main);border:1px solid var(--border);padding:8px 16px;">Sign Out</button></li>`;
+      } else {
+        navAuth.innerHTML = `<li><a href="#contact" class="nav-cta">Register To Bid</a></li>`;
+      }
+    });
+
+    window.__kgcSignOut = () => signOut(auth);
+
+    const auctionRef = doc(db, 'auctions', 'KGC-112-07');
+    let currentLiveBid = 218500;
+
+    onSnapshot(auctionRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        currentLiveBid = data.currentBid;
+        document.getElementById('currentBid').textContent = 'RM ' + data.currentBid.toLocaleString();
+        document.getElementById('bidCount').textContent = data.bidCount;
+        
+        const list = document.getElementById('bidList');
+        const entry = document.createElement('div');
+        entry.className = 'bid-entry';
+        entry.innerHTML = `<div class="bid-user">${data.highestBidder || 'Anonymous'}</div><div class="bid-amount">RM ${currentLiveBid.toLocaleString()}</div>`;
+        list.insertBefore(entry, list.firstChild);
+        if(list.children.length > 5) list.removeChild(list.lastChild);
+      }
+    });
+
+    window.placeBid = async function() {
+      if (!auth.currentUser) { alert("Please log in or proceed to the registration section below to activate bidding verification layers."); return; }
+      const inputField = document.getElementById('bidField');
+      const bidAmount = parseFloat(inputField.value);
+
+      if (!bidAmount || bidAmount <= currentLiveBid) { alert("Your proxy bid statement layout metrics must exceed RM " + currentLiveBid.toLocaleString()); return; }
+      try {
+        const currentCount = parseInt(document.getElementById('bidCount').textContent) || 0;
+        await updateDoc(auctionRef, { currentBid: bidAmount, bidCount: currentCount + 1, highestBidder: auth.currentUser.displayName || auth.currentUser.email.split('@')[0] });
+        inputField.value = ''; alert("✅ BID LOGGED SUCCESSFULLY INTO THE TRANSACTION POOL ENGINE");
+      } catch (e) { alert("KYC Verification Required."); }
+    };
+  </script>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-mark">KG</div>
+    <div class="logo-text">
+      <div class="top">KANSAI GROUP</div>
+      <div class="btm">Corporation &nbsp;|&nbsp; Osaka, Japan</div>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#inventory">Inventory</a></li>
+    <li><a href="#auction">Live Auction</a></li>
+    <ul id="navAuth" style="display:contents;list-style:none;"></ul>
+  </ul>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-stripe"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Now Open in Kuala Lumpur</div>
+    <h1>JAPAN'S<br><span>FINEST</span><br>AUTO<br><span class="gold">AUCTION</span></h1>
+    <p class="hero-sub">Direct from Osaka to Malaysia — premium Japanese vehicles at unbeatable prices. Buy directly or bid live for the best deals.</p>
+    <div class="hero-actions">
+      <a href="#inventory" class="btn-primary">View Inventory</a>
+      <a href="#auction" class="btn-outline">Join Live Auction</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2,400+</div><div class="stat-lbl">Vehicles Sold</div></div>
+    <div class="stat"><div class="stat-num">35 YRS</div><div class="stat-lbl">In Business</div></div>
+    <div class="stat"><div class="stat-num">RM 2B+</div><div class="stat-lbl">Value</div></div>
+    <div class="stat"><div class="stat-num">99%</div><div class="stat-lbl">Satisfaction</div></div>
+  </div>
+</section>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Alphard 2025 — RM 265,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Nissan GTR R35 — RM 620,000</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> Toyota Land Cruiser 300 — RM 520,000</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-label">Who We Are</div>
+  <h2>DRIVEN BY <span class="accent">TRUST,</span><br>BUILT IN <span class="gold-txt">JAPAN</span></h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Kansai Group Corporation was founded in Osaka, Japan — the heartland of Japan's automotive trade. For over 35 years, we have been exporting premium Japanese vehicles to markets across Asia, earning a reputation for transparency, quality, and unmatched selection.</p>
+      <div class="about-offices">
+        <div class="office-card"><div class="office-flag">🇯🇵</div><div class="office-city">OSAKA HQ</div><div class="office-addr">1-7-22 Utsubohonmachi Nishi-ku, Osaka JAPAN</div></div>
+        <div class="office-card"><div class="office-flag">🇲🇾</div><div class="office-city">KUALA LUMPUR</div><div class="office-addr">3 Towers, Jalan Ampang, 50450 KL</div></div>
+      </div>
+    </div>
+    <div class="about-visual">
+      <div class="about-visual-bg">KGC</div>
+      <div class="trust-grid">
+        <div class="trust-item"><div class="trust-item-num">25+</div><div class="trust-item-lbl">Years Experience</div></div>
+        <div class="trust-item"><div class="trust-item-num">1000+</div><div class="trust-item-lbl">Cars Stock</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services-bg">
+  <div class="section-label">What We Offer</div>
+  <h2>OUR <span class="accent">SERVICES</span></h2>
+  <div class="services-grid">
+    <div class="service-card"><h3>Direct Stock Sales</h3><p>Curated inventory of premium Japanese vehicles available for direct purchase straight from our KL showroom.</p></div>
+    <div class="service-card"><h3>Live Online Auction</h3><p>Participate in our thrilling live auctions direct from Japan. Bid in real-time right from your device.</p></div>
+    <div class="service-card"><h3>Vehicle Import</h3><p>End-to-end global logistics tracking pipelines from initial documentation to local JPJ clearing registration sheets.</p></div>
+  </div>
+</section>
+
+<section id="inventory">
+  <div class="inv-header">
+    <div><div class="section-label">Available Now</div><h2>OUR <span class="accent">STOCK</span> IN <span class="gold-txt">MALAYSIA</span></h2></div>
+    <a href="#contact" class="btn-outline">Request a Car</a>
+  </div>
+  <div class="inv-filter"><button class="filter-btn active">All Live Vehicles</button></div>
+  
+  <div class="cars-grid" id="carsGrid">
+    <div class="car-card" onclick="openDetailDrawer('TOYOTA', 'ALPHARD 2.5 Z', '265,000', '2025', '2500CC Dual VVT-i', '7-Seater Prestige Lounge', 'Brand New (Grade 6A Stock Asset)', ['alphard1.jpg','alphard2.jpg','alphard3.jpg'], '6A')">
+      <div class="car-img">
+        <div class="car-badge-premium-screenshot"><div class="lbl">Auction Grade</div><div class="val">6A</div></div>
+        <div class="car-gallery"><img src="alphard1.jpg" alt="Toyota Alphard"></div>
+      </div>
+      <div class="car-info">
+        <div class="car-make">TOYOTA</div><div class="car-model">ALPHARD 2.5 Z</div>
+        <div class="car-specs"><span class="spec">2025</span><span class="spec">Brand New</span></div>
+        <div class="car-price">265,000 <span class="currency">RM</span></div>
+      </div>
+    </div>
+
+    <div class="car-card" onclick="openDetailDrawer('NISSAN', 'GT-R R35 PREMIUM', '620,000', '2021', '3.8L V6 Twin Turbo', '4-Seater Motor Track Pack', '22,000 KM Inspection Sheet Tracked', ['alphard1.jpg'], '5')">
+      <div class="car-img">
+        <div class="car-badge-premium-screenshot"><div class="lbl">Auction Grade</div><div class="val">5</div></div>
+        <div class="car-gallery"><img src="alphard1.jpg" alt="Nissan GTR"></div>
+      </div>
+      <div class="car-info">
+        <div class="car-make">NISSAN</div><div class="car-model">GT-R R35 PREMIUM</div>
+        <div class="car-specs"><span class="spec">2021</span><span class="spec">22,000 km</span></div>
+        <div class="car-price">620,000 <span class="currency">RM</span></div>
+      </div>
+    </div>
+
+    <div class="car-card" onclick="openDetailDrawer('TOYOTA', 'LAND CRUISER 300', '520,000', '2022', '3.5L Twin Turbo V6', '7-Seater 4x4 Luxury Cruiser', '32,000 KM Full Document Trail Block', ['alphard1.jpg'], '4.5')">
+      <div class="car-img">
+        <div class="car-badge-premium-screenshot"><div class="lbl">Auction Grade</div><div class="val">4.5</div></div>
+        <div class="car-gallery"><img src="alphard1.jpg" alt="Land Cruiser"></div>
+      </div>
+      <div class="car-info">
+        <div class="car-make">TOYOTA</div><div class="car-model">LAND CRUISER 300</div>
+        <div class="car-specs"><span class="spec">2022</span><span class="spec">32,000 km</span></div>
+        <div class="car-price">520,000 <span class="currency">RM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="auction" class="auction-bg">
+  <div class="section-label">Real-Time Bidding</div>
+  <h2>LIVE <span class="accent">AUCTION</span></h2>
+  <div class="auction-main">
+    <div class="auction-featured">
+      <div class="auction-car-display"><img src="crown.jpg" alt="Toyota Crown" style="width:100%; height:100%; object-fit:cover;"></div>
+      <div class="auction-car-info">
+        <div class="auction-car-name">TOYOTA CROWN 2.5 RS ADVANCE</div>
+        <div class="bid-row">
+          <div><div class="current-bid-lbl">Current Bid</div><div class="current-bid" id="currentBid">RM 218,500</div></div>
+          <div><div class="current-bid-lbl">Bidders</div><div class="current-bid" id="bidCount" style="color:var(--text-main);">0</div></div>
+        </div>
+        <div class="bid-input-row">
+          <input type="number" class="bid-input" placeholder="Enter proxy bid (RM)" id="bidField"/>
+          <button class="btn-primary" onclick="window.placeBid()">Place Bid</button>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-panel">
+      <div class="countdown-box">
+        <div class="countdown-digits">
+          <div class="digit-block"><div class="digit-num" id="hrs">00</div></div>
+          <div class="digit-block"><div class="digit-num" id="mins">00</div></div>
+          <div class="digit-block"><div class="digit-num" id="secs">00</div></div>
+        </div>
+      </div>
+      <div class="bid-history"><div id="bidList"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-bg">
+  <h2>CONTACT <span class="accent">US</span></h2>
+  <div class="contact-grid">
+    <div class="contact-form">
+      <div class="form-group"><input type="text" placeholder="Your Name" id="cName"/></div>
+      <div class="form-group"><input type="tel" placeholder="WhatsApp Number" id="cPhone"/></div>
+      <textarea placeholder="Message..." id="cMsg"></textarea>
+      <button class="btn-primary" onclick="submitContact()">Send Enquiry</button>
+      <div class="success-msg" id="contactSuccess">✓ Enquiry logged successfully!</div>
+    </div>
+    <div class="contact-info">
+      <div class="contact-item"><div class="ci-val">3 Towers, Jalan Ampang, Kuala Lumpur, Malaysia</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="detail-drawer" id="detailDrawer">
+  <div class="drawer-close" onclick="closeDrawer()">✕</div>
+  <div class="drawer-hero">
+    <div class="drawer-hero-gallery" id="dGalleryFrame"></div>
+    <div class="screenshot-grade-badge-overlay">
+      <div class="lbl">Auction Grade</div>
+      <div class="val" id="dGrade">-</div>
+    </div>
+  </div>
+  <div class="drawer-content">
+    <div class="section-label" id="dMake">-</div>
+    <div class="drawer-title" id="dModel">-</div>
+    <div class="drawer-price" id="dPrice">-</div>
+    <div class="drawer-specs-grid">
+      <div class="drawer-spec-item"><span class="label">Year</span><span class="val" id="dYear">-</span></div>
+      <div class="drawer-spec-item"><span class="label">Engine</span><span class="val" id="dEngine">-</span></div>
+      <div class="drawer-spec-item"><span class="label">Seats</span><span class="val" id="dSeats">-</span></div>
+      <div class="drawer-spec-item"><span class="label">Mileage</span><span class="val" id="dMileage">-</span></div>
+    </div>
+    <button class="btn-primary" id="drawerWhatsAppBtn" style="width:100%; padding:14px;">WhatsApp Inquiry</button>
+  </div>
+</div>
+
+<footer style="background:#111827; padding: 40px; text-align: center; color: white;">
+  <span>© 2026 Kansai Group Malaysia. All rights reserved.</span>
+</footer>
+
+<script>
+let endTime = Date.now() + (2*3600 + 34*60 + 17) * 1000;
+function updateCountdown() {
+  let rem = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+  document.getElementById('hrs').textContent = String(Math.floor(rem/3600)).padStart(2,'0');
+  document.getElementById('mins').textContent = String(Math.floor((rem%3600)/60)).padStart(2,'0');
+  document.getElementById('secs').textContent = String(rem%60).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+
+function filterCars(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.car-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat.includes(cat)) ? '' : 'none';
+  });
+}
+
+function openDetailDrawer(make, model, price, year, engine, seats, mileage, imagesArray, grade) {
+  document.getElementById('dMake').textContent = make.toUpperCase();
+  document.getElementById('dModel').textContent = model.toUpperCase();
+  document.getElementById('dPrice').textContent = 'RM ' + price;
+  document.getElementById('dYear').textContent = year;
+  document.getElementById('dEngine').textContent = engine;
+  document.getElementById('dSeats').textContent = seats;
+  document.getElementById('dMileage').textContent = mileage;
+  document.getElementById('dGrade').textContent = grade;
+
+  const container = document.getElementById('dGalleryFrame');
+  container.innerHTML = '';
+  
+  if (Array.isArray(imagesArray)) {
+    imagesArray.forEach(url => {
+      const img = document.createElement('img'); img.src = url;
+      img.onerror = () => { img.src = 'alphard1.jpg'; };
+      container.appendChild(img);
+    });
+  }
+  document.getElementById('drawerWhatsAppBtn').onclick = () => {
+    window.open("https://wa.me/601151177026?text=" + encodeURIComponent("Inquiry for " + make + " " + model), '_blank');
+  };
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('detailDrawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('detailDrawer').classList.remove('open');
+}
+function submitContact() { document.getElementById('contactSuccess').style.display='block'; }
+</script>
+
+<script type="module">
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  window.cloudCarImagesMemory = {};
+
+  async function loadFireCMSExtraCars() {
+    try {
+      const db = getFirestore();
+      const querySnapshot = await getDocs(collection(db, "stock"));
+      const grid = document.getElementById('carsGrid');
+      if (!grid) return;
+
+      querySnapshot.forEach((carDoc) => {
+        const car = carDoc.data();
+        if (carDoc.id.startsWith('sample')) return;
+
+        const id = carDoc.id;
+        const make = (car.make || 'TOYOTA').toUpperCase();
+        const model = (car.model || 'ALPHARD').toUpperCase();
+        const price = car.price ? parseFloat(car.price).toLocaleString() : 'TBD';
+        const year = car.year || '2025';
+        const engine = car.engine || '2500CC';
+        const seats = car.seats || '7';
+        const mileage = car.mileage || 'Brand New';
+        const grade = car.grade || car.AuctionGrade || '5';
+        
+        let allImages = car.images && car.images.length > 0 ? car.images : ['alphard1.jpg'];
+        window.cloudCarImagesMemory[id] = allImages;
+
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.setAttribute('data-cat', 'suv');
+        card.onclick = () => openDetailDrawer(make, model, price, year, engine, seats + ' Seats', mileage, allImages, grade);
+        
+        card.innerHTML = `
+          <div class="car-img">
+            <div class="car-badge-premium-screenshot"><div class="lbl">Auction Grade</div><div class="val">${grade}</div></div>
+            <div class="car-gallery"><img src="${allImages[0]}" onerror="this.src='alphard1.jpg'"></div>
+          </div>
+          <div class="car-info">
+            <div class="car-make">${make}</div><div class="car-model">${model}</div>
+            <div class="car-specs"><span class="spec">${year}</span><span class="spec">${mileage}</span></div>
+            <div class="car-price">${price} <span class="currency">RM</span></div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    } catch (e) { console.log("Isolated execution loop active."); }
+  }
+  setTimeout(loadFireCMSExtraCars, 600);
+</script>
+</body>
+</html>
